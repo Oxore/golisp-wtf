@@ -1,15 +1,20 @@
 program        = { expression } .
 
 expression     = BUILTIN
-               | NUMBER
                | IDENTIFIER
-               | STRING
+               | LITERAL
                | [ "'" ] "(" expression { [ "." ] expression } [ "." ] ")" .
 
 BUILTIN        = "define"
                | "lambda"
                | "car"
                | "cdr"
+               .
+
+LITERAL        = "#t"
+               | "#f"
+               | NUMBER
+               | STRING
                .
 
 NUMBER         = DIGIT { DIGIT } [ "." DIGIT { DIGIT } ] .
