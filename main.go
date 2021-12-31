@@ -62,6 +62,7 @@ const (
 	LexIdle State = iota
 	LexNumber
 	LexIdentifier
+	LexComment
 	LexString
 	LexStringEscaped
 )
@@ -182,6 +183,8 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			self.BeginIdentifier()
 		} else if c == '"' {
 			return self.BeginString()
+		} else if c == ';' {
+			self.State = LexComment
 		} else {
 			// TODO raise error
 			panic("unexpected byte")
@@ -205,6 +208,8 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			token.Length += 1
 			token.Type = TokIdentifier
 			self.Tokens[len(self.Tokens)-1] = token
+		} else if c == ';' {
+			self.State = LexComment
 		} else {
 			// TODO raise error
 			panic("unexpected byte")
@@ -223,6 +228,17 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			token := self.Tokens[len(self.Tokens)-1]
 			token.Length += 1
 			self.Tokens[len(self.Tokens)-1] = token
+		} else if c == ';' {
+			self.State = LexComment
+		} else {
+			// TODO raise error
+			panic("unexpected byte")
+		}
+	case LexComment:
+		if c == 0x0A {
+			self.State = LexIdle
+		} else if IsCharacter(c) {
+			// Skip
 		} else {
 			// TODO raise error
 			panic("unexpected byte")
