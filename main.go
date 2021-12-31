@@ -64,6 +64,25 @@ const (
 	LexIdentifier
 )
 
+type TokensFormatter struct {
+	Source           string
+	Tokens           []Token
+}
+
+func (tfmt TokensFormatter) String() string {
+	var sb strings.Builder
+	sb.WriteString("[")
+	for i, v := range tfmt.Tokens {
+		if i != 0 {
+			sb.WriteString(", ")
+		}
+		literal := tfmt.Source[v.Offset : v.Offset+v.Length]
+		sb.WriteString(fmt.Sprintf("%v<%v>", v, literal))
+	}
+	sb.WriteString("]")
+	return sb.String()
+}
+
 type Lex struct {
 	Source           strings.Builder
 	Tokens           []Token
@@ -71,31 +90,30 @@ type Lex struct {
 }
 
 func (lex Lex) String() string {
-	var sb strings.Builder
-	sb.WriteString("[")
-	for i, v := range lex.Tokens {
-		if i != 0 {
-			sb.WriteString(", ")
-		}
-		literal := lex.Source.String()[v.Offset : v.Offset+v.Length]
-		sb.WriteString(fmt.Sprintf("%v<%v>", v, literal))
-	}
-	sb.WriteString("]")
-	return sb.String()
+	return TokensFormatter{lex.Source.String(), lex.Tokens}.String()
 }
 
-func (self *Lex) AddToken(t TokenType) {
-	self.State = LexIdle
-	self.Tokens = append(self.Tokens, Token{self.Source.Len(), 1, t})
+func (self *Lex) AddToken(t TokenType) []Token {
+	var newTokens []Token
+	if (self.State != LexIdle) {
+		self.State = LexIdle
+		newTokens = append(newTokens, self.Tokens[len(self.Tokens)-1])
+	}
+	newToken := Token{self.Source.Len(), 1, t};
+	newTokens = append(newTokens, newToken)
+	self.Tokens = append(self.Tokens, newToken)
+	return newTokens
 }
 
 func (self *Lex) BeginNumber() {
-	self.Tokens = append(self.Tokens, Token{self.Source.Len(), 1, TokNumber})
+	newToken := Token{self.Source.Len(), 1, TokNumber}
+	self.Tokens = append(self.Tokens, newToken)
 	self.State = LexNumber
 }
 
 func (self *Lex) BeginIdentifier() {
-	self.Tokens = append(self.Tokens, Token{self.Source.Len(), 1, TokIdentifier})
+	newToken := Token{self.Source.Len(), 1, TokIdentifier}
+	self.Tokens = append(self.Tokens, newToken)
 	self.State = LexIdentifier
 }
 
@@ -111,16 +129,18 @@ func IsAlphaNumeric(c byte) bool {
 	return IsNumeric(c) || IsAlphabetic(c)
 }
 
-func (self *Lex) Consume(c byte) {
+func (self *Lex) Consume(c byte) []Token {
+	var newTokens []Token
 	if c == '(' {
-		self.AddToken(TokLparen)
+		newTokens = append(newTokens, self.AddToken(TokLparen)...)
 	} else if c == ')' {
-		self.AddToken(TokRparen)
+		newTokens = append(newTokens, self.AddToken(TokRparen)...)
 	} else if c == '.' {
-		self.AddToken(TokDot)
+		newTokens = append(newTokens, self.AddToken(TokDot)...)
 	} else if c == ' ' || c == 0x0A || c == 0x0D {
 		if self.State != LexIdle {
 			self.State = LexIdle
+			newTokens = append(newTokens, self.Tokens[len(self.Tokens)-1])
 		}
 	} else {
 		switch self.State {
@@ -159,23 +179,23 @@ func (self *Lex) Consume(c byte) {
 		}
 	}
 	self.Source.WriteByte(c)
+	return newTokens
 }
 
 func main() {
 	var lex Lex
 	var tokensNum int
+	var tokens []Token
 	for {
 		var c []byte = []byte{0}
 		_, err := os.Stdin.Read(c)
 		if err != nil {
 			break
 		}
-		lex.Consume(c[0])
+		tokens = append(tokens, lex.Consume(c[0])...)
 		if c[0] == '\n' && len(lex.Tokens) > tokensNum {
-			lexTmp := lex
-			lexTmp.Tokens = lex.Tokens[tokensNum:]
-			fmt.Println(lexTmp)
-			tokensNum = len(lex.Tokens)
+			fmt.Println(TokensFormatter{lex.Source.String(), tokens})
+			tokens = tokens[:0]
 		}
 	}
 }
