@@ -67,8 +67,8 @@ const (
 )
 
 type TokensFormatter struct {
-	Source           string
-	Tokens           []Token
+	Source string
+	Tokens []Token
 }
 
 func (tfmt TokensFormatter) String() string {
@@ -86,9 +86,9 @@ func (tfmt TokensFormatter) String() string {
 }
 
 type Lex struct {
-	Source           strings.Builder
-	Tokens           []Token
-	State            State
+	Source strings.Builder
+	Tokens []Token
+	State  State
 }
 
 func (lex Lex) String() string {
@@ -97,11 +97,11 @@ func (lex Lex) String() string {
 
 func (self *Lex) AddToken(t TokenType) []Token {
 	var newTokens []Token
-	if (self.State != LexIdle) {
+	if self.State != LexIdle {
 		self.State = LexIdle
 		newTokens = append(newTokens, self.Tokens[len(self.Tokens)-1])
 	}
-	newToken := Token{self.Source.Len(), 1, t};
+	newToken := Token{self.Source.Len(), 1, t}
 	newTokens = append(newTokens, newToken)
 	self.Tokens = append(self.Tokens, newToken)
 	return newTokens
@@ -121,7 +121,7 @@ func (self *Lex) BeginIdentifier() {
 
 func (self *Lex) BeginString() []Token {
 	var newTokens []Token
-	if (self.State != LexIdle) {
+	if self.State != LexIdle {
 		newTokens = append(newTokens, self.Tokens[len(self.Tokens)-1])
 	}
 	newToken := Token{self.Source.Len(), 1, TokString}
@@ -135,7 +135,11 @@ func IsNumeric(c byte) bool {
 }
 
 func IsAlphabetic(c byte) bool {
-	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '_')
+	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == 'w' || c == 'x' ||
+		c == 'y' || c == 'z' || c == '-' || c == '!' || c == '$' || c == '%' || c == '*' ||
+		c == '+' || c == '?' || c == '&' || c == '.' || c == '\\' || c == '/' || c == '~' ||
+		c == '`' || c == ':' || c == '=' || c == '<' || c == '>' ||
+		c == '^' || c == '#'
 }
 
 func IsCharacter(c byte) bool {
@@ -143,7 +147,7 @@ func IsCharacter(c byte) bool {
 }
 
 func IsAlphaNumeric(c byte) bool {
-	return IsNumeric(c) || IsAlphabetic(c)
+	return IsNumeric(c) || IsAlphabetic(c) || c == '!' || c == '$'
 }
 
 func IsSingleCharToken(c byte) bool {

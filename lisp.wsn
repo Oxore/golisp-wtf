@@ -2,19 +2,14 @@ program        = { expression } .
 
 expression     = BUILTIN
                | IDENTIFIER
-               | LITERAL
+               | NUMBER
+               | STRING
                | [ "'" ] "(" expression { [ "." ] expression } [ "." ] ")" .
 
 BUILTIN        = "define"
                | "lambda"
                | "car"
                | "cdr"
-               .
-
-LITERAL        = "#t"
-               | "#f"
-               | NUMBER
-               | STRING
                .
 
 NUMBER         = DIGIT { DIGIT } [ "." DIGIT { DIGIT } ] .
@@ -31,7 +26,7 @@ ALPHANUM = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | "K" | "L"
          | "Y" | "Z" | "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h" | "i" | "j"
          | "k" | "l" | "m" | "n" | "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v"
          | "w" | "x" | "y" | "z" | "-" | "!" | "$" | "%" | "*" | "+" | "?" | "&"
-         | "." | "\" | "/" | "~" | "`" | ":" | "=" | "<" | ">" | "\""" | "\'"
-         | "^" | DIGIT .
+         | "." | "\" | "/" | "~" | "`" | ":" | "=" | "<" | ">" | "^" | "#"
+         | DIGIT .
 
 DIGIT = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "_" .
