@@ -162,37 +162,35 @@ func TokenFromByte(c byte) TokenType {
 	return TokDot
 }
 
-func (self *Lex) Consume(c byte) []Token {
-	// TODO do not use the variable, always return instead of `append`
-	var newTokens []Token
+func (self *Lex) ConsumeImpl(c byte) []Token {
 	switch self.State {
 	case LexIdle:
 		if IsSingleCharToken(c) {
-			newTokens = append(newTokens, self.AddToken(TokenFromByte(c))...)
+			return self.AddToken(TokenFromByte(c))
 		} else if c == ' ' || c == 0x0A || c == 0x0D {
 			if self.State != LexIdle {
 				self.State = LexIdle
-				newTokens = append(newTokens, self.Tokens[len(self.Tokens)-1])
+				return self.Tokens[len(self.Tokens)-1:]
 			}
 		} else if IsNumeric(c) {
 			self.BeginNumber()
 		} else if IsAlphaNumeric(c) {
 			self.BeginIdentifier()
 		} else if c == '"' {
-			newTokens = append(newTokens, self.BeginString()...)
+			return self.BeginString()
 		} else {
 			// TODO raise error
 			panic("unexpected byte")
 		}
 	case LexNumber:
 		if IsSingleCharToken(c) {
-			newTokens = append(newTokens, self.AddToken(TokenFromByte(c))...)
+			return self.AddToken(TokenFromByte(c))
 		} else if c == '"' {
 			self.BeginString()
 		} else if c == ' ' || c == 0x0A || c == 0x0D {
 			if self.State != LexIdle {
 				self.State = LexIdle
-				newTokens = append(newTokens, self.BeginString()...)
+				return self.BeginString()
 			}
 		} else if IsNumeric(c) {
 			token := self.Tokens[len(self.Tokens)-1]
@@ -209,13 +207,13 @@ func (self *Lex) Consume(c byte) []Token {
 		}
 	case LexIdentifier:
 		if IsSingleCharToken(c) {
-			newTokens = append(newTokens, self.AddToken(TokenFromByte(c))...)
+			return self.AddToken(TokenFromByte(c))
 		} else if c == '"' {
 			self.BeginString()
 		} else if c == ' ' || c == 0x0A || c == 0x0D {
 			if self.State != LexIdle {
 				self.State = LexIdle
-				newTokens = append(newTokens, self.Tokens[len(self.Tokens)-1])
+				return self.Tokens[len(self.Tokens)-1:]
 			}
 		} else if IsAlphaNumeric(c) {
 			token := self.Tokens[len(self.Tokens)-1]
@@ -245,7 +243,7 @@ func (self *Lex) Consume(c byte) []Token {
 			token.Length += 1
 			self.Tokens[len(self.Tokens)-1] = token
 			self.State = LexIdle
-			newTokens = append(newTokens, self.Tokens[len(self.Tokens)-1])
+			return self.Tokens[len(self.Tokens)-1:]
 		} else if c == '\\' {
 			token := self.Tokens[len(self.Tokens)-1]
 			token.Length += 1
@@ -260,6 +258,11 @@ func (self *Lex) Consume(c byte) []Token {
 			panic("unexpected byte")
 		}
 	}
+	return []Token{}
+}
+
+func (self *Lex) Consume(c byte) []Token {
+	newTokens := self.ConsumeImpl(c)
 	self.Source.WriteByte(c)
 	return newTokens
 }
