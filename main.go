@@ -13,13 +13,13 @@ const (
 	TokBuiltinDefine
 	TokBuiltinLambda
 	TokBuiltinQuote
+	TokBuiltinCar
+	TokBuiltinCdr
 	TokIdentifier
 	TokString
 	TokLparen
 	TokRparen
 	TokDot
-	TokCar
-	TokCdr
 )
 
 type Token struct {
@@ -48,10 +48,10 @@ func (token Token) String() string {
 		return "TokRparen"
 	case TokDot:
 		return "TokDot"
-	case TokCar:
-		return "TokCar"
-	case TokCdr:
-		return "TokCdr"
+	case TokBuiltinCar:
+		return "TokBuiltinCar"
+	case TokBuiltinCdr:
+		return "TokBuiltinCdr"
 	}
 	return "<?>"
 }
@@ -87,6 +87,7 @@ func (tfmt TokensFormatter) String() string {
 }
 
 type Lex struct {
+	// TODO use dynamically allocated huge freaking buffer to optimize tokenization of builtins
 	Source strings.Builder
 	Tokens []Token
 	State  State
@@ -121,6 +122,7 @@ func (self *Lex) BeginIdentifier() {
 }
 
 func (self *Lex) BeginString() []Token {
+	panic("")
 	var newTokens []Token
 	if self.State != LexIdle {
 		newTokens = append(newTokens, self.Tokens[len(self.Tokens)-1])
@@ -129,6 +131,15 @@ func (self *Lex) BeginString() []Token {
 	self.Tokens = append(self.Tokens, newToken)
 	self.State = LexString
 	return newTokens
+}
+
+func (self *Lex) FinishBuiltin(t TokenType) []Token {
+	token := self.Tokens[len(self.Tokens)-1]
+	token.Length += 1
+	token.Type = t
+	self.Tokens[len(self.Tokens)-1] = token
+	self.State = LexIdle
+	return []Token{token}
 }
 
 func IsNumeric(c byte) bool {
@@ -167,16 +178,49 @@ func TokenFromByte(c byte) TokenType {
 	return TokDot
 }
 
+func (self Lex) IsBuiltinComposition(c byte) bool {
+	var builtins []string = []string{
+		"car",
+		"cdr",
+		"quote",
+		"define",
+		"lambda",
+	}
+	//var largestLength = len(builtins[len(builtins)-1])
+	for _, builtin := range(builtins) {
+		if self.Source.String()[self.Source.Len()-self.Tokens[len(self.Tokens)-1].Length:] + string([]byte{c}) == builtin {
+			return true
+		}
+	}
+	return false
+}
+
+func (self Lex) BuiltinWithByte(c byte) TokenType {
+	literal := self.Source.String()[self.Source.Len()-self.Tokens[len(self.Tokens)-1].Length:] + string([]byte{c})
+	switch literal {
+	case "car":
+		return TokBuiltinCar
+	case "cdr":
+		return TokBuiltinCdr
+	case "quote":
+		return TokBuiltinQuote
+	case "define":
+		return TokBuiltinDefine
+	case "lambda":
+		return TokBuiltinLambda
+	}
+	panic(fmt.Sprintf("No known conversion to TokenType for \"%v\"", literal))
+	return TokBuiltinLambda
+}
+
 func (self *Lex) ConsumeImpl(c byte) []Token {
+	// TODO support quote syntax like "(car '(1 2 3))"
 	switch self.State {
 	case LexIdle:
 		if IsSingleCharToken(c) {
 			return self.AddToken(TokenFromByte(c))
 		} else if c == ' ' || c == 0x0A || c == 0x0D {
-			if self.State != LexIdle {
-				self.State = LexIdle
-				return self.Tokens[len(self.Tokens)-1:]
-			}
+			// Skip
 		} else if IsNumeric(c) {
 			self.BeginNumber()
 		} else if IsAlphaNumeric(c) {
@@ -187,7 +231,7 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			self.State = LexComment
 		} else {
 			// TODO raise error
-			panic("unexpected byte")
+			panic(fmt.Sprintf("unexpected byte '%v'", c))
 		}
 	case LexNumber:
 		if IsSingleCharToken(c) {
@@ -197,7 +241,7 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 		} else if c == ' ' || c == 0x0A || c == 0x0D {
 			if self.State != LexIdle {
 				self.State = LexIdle
-				return self.BeginString()
+				return self.Tokens[len(self.Tokens)-1:]
 			}
 		} else if IsNumeric(c) {
 			token := self.Tokens[len(self.Tokens)-1]
@@ -212,10 +256,12 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			self.State = LexComment
 		} else {
 			// TODO raise error
-			panic("unexpected byte")
+			panic(fmt.Sprintf("unexpected byte '%v'", c))
 		}
 	case LexIdentifier:
-		if IsSingleCharToken(c) {
+		if self.IsBuiltinComposition(c) {
+			return self.FinishBuiltin(self.BuiltinWithByte(c))
+		} else if IsSingleCharToken(c) {
 			return self.AddToken(TokenFromByte(c))
 		} else if c == '"' {
 			self.BeginString()
@@ -232,7 +278,7 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			self.State = LexComment
 		} else {
 			// TODO raise error
-			panic("unexpected byte")
+			panic(fmt.Sprintf("unexpected byte '%v'", c))
 		}
 	case LexComment:
 		if c == 0x0A {
@@ -241,7 +287,7 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			// Skip
 		} else {
 			// TODO raise error
-			panic("unexpected byte")
+			panic(fmt.Sprintf("unexpected byte '%v'", c))
 		}
 	case LexStringEscaped:
 		if c == '\\' {
@@ -254,7 +300,7 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			self.Tokens[len(self.Tokens)-1] = token
 		} else {
 			// TODO raise error
-			panic("unexpected byte")
+			panic(fmt.Sprintf("unexpected byte '%v'", c))
 		}
 		self.State = LexString
 	case LexString:
@@ -275,7 +321,7 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			self.Tokens[len(self.Tokens)-1] = token
 		} else {
 			// TODO raise error
-			panic("unexpected byte")
+			panic(fmt.Sprintf("unexpected byte '%v'", c))
 		}
 	}
 	return []Token{}

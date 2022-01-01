@@ -8,6 +8,7 @@ expression     = BUILTIN
 
 BUILTIN        = "define"
                | "lambda"
+               | "quote"
                | "car"
                | "cdr"
                .
