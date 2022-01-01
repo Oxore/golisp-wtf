@@ -15,6 +15,7 @@ const (
 	TokLparen
 	TokRparen
 	TokDot
+	TokQuote
 )
 
 type Token struct {
@@ -37,6 +38,8 @@ func (token Token) String() string {
 		return "TokRparen"
 	case TokDot:
 		return "TokDot"
+	case TokQuote:
+		return "TokQuote"
 	}
 	panic(fmt.Sprintf("Unknown token type %v", token))
 	return "<?>"
@@ -148,7 +151,7 @@ func IsAlphaNumeric(c byte) bool {
 }
 
 func IsSingleCharToken(c byte) bool {
-	return c == '(' || c == ')' || c == '.'
+	return c == '(' || c == ')' || c == '.' || c == '\''
 }
 
 func TokenFromByte(c byte) TokenType {
@@ -158,6 +161,8 @@ func TokenFromByte(c byte) TokenType {
 		return TokRparen
 	} else if c == '.' {
 		return TokDot
+	} else if c == '\'' {
+		return TokQuote
 	}
 	panic(fmt.Sprintf("Byte %v cannot be converted to token", c))
 	return TokDot
