@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"io"
 )
 
 type TokenType int
 
 const (
-	TokNumber TokenType = iota
+	TokInvalid TokenType = iota
+	TokNumber
 	TokIdentifier
 	TokString
 	TokLparen
@@ -24,8 +26,58 @@ type Token struct {
 	Type   TokenType
 }
 
+type TokensFormatter struct {
+	Source string
+	Tokens []Token
+}
+
+type LexState int
+
+const (
+	LexIdle LexState = iota
+	LexNumber
+	LexIdentifier
+	LexComment
+	LexString
+	LexStringEscaped
+)
+
+type Lex struct {
+	Source strings.Builder
+	Tokens []Token
+	State  LexState
+}
+
+type AtomType int
+
+const (
+	AtomInvalid AtomType = iota
+	AtomNumber
+	AtomIdentifier
+	AtomString
+)
+
+type Atom struct {
+	Representation string
+	Type AtomType
+}
+
+type Expression struct {
+	Atom Atom
+	Left  *Expression
+	Right *Expression
+}
+
+type Pars struct {
+	Lex    Lex
+	Tree   []Expression
+	tokens []Token
+}
+
 func (token Token) String() string {
 	switch token.Type {
+	case TokInvalid:
+		return "TokInvalid"
 	case TokNumber:
 		return "TokNumber"
 	case TokIdentifier:
@@ -41,24 +93,7 @@ func (token Token) String() string {
 	case TokQuote:
 		return "TokQuote"
 	}
-	panic(fmt.Sprintf("Unknown token type %v", token))
-	return "<?>"
-}
-
-type State int
-
-const (
-	LexIdle State = iota
-	LexNumber
-	LexIdentifier
-	LexComment
-	LexString
-	LexStringEscaped
-)
-
-type TokensFormatter struct {
-	Source string
-	Tokens []Token
+	panic(fmt.Sprintf("Unknown token type %v", token.Type))
 }
 
 func (tfmt TokensFormatter) String() string {
@@ -75,15 +110,46 @@ func (tfmt TokensFormatter) String() string {
 	return sb.String()
 }
 
-type Lex struct {
-	// TODO use dynamically allocated huge freaking buffer to optimize tokenization of builtins
-	Source strings.Builder
-	Tokens []Token
-	State  State
-}
-
 func (lex Lex) String() string {
 	return TokensFormatter{lex.Source.String(), lex.Tokens}.String()
+}
+
+func (atom Atom) String() string {
+	switch atom.Type {
+	case AtomInvalid:
+		return fmt.Sprintf("AtomInvalid<%v>", atom.Representation);
+	case AtomNumber:
+		return fmt.Sprintf("%v", atom.Representation);
+	case AtomIdentifier:
+		return fmt.Sprintf("%v", atom.Representation);
+	case AtomString:
+		return fmt.Sprintf("%v", atom.Representation);
+	}
+	panic(fmt.Sprintf("Unknown atom type %v", atom.Type))
+}
+
+func (expression Expression) String() string {
+	var sb strings.Builder
+	if expression.Atom.Type != AtomInvalid {
+		sb.WriteString(expression.Atom.String())
+	} else {
+		sb.WriteString("(")
+		if expression.Left != nil || expression.Right != nil {
+			if expression.Left == nil {
+				sb.WriteString("()")
+			} else {
+				sb.WriteString(expression.Left.String())
+			}
+			sb.WriteString(" . ")
+			if expression.Right == nil {
+				sb.WriteString("()")
+			} else {
+				sb.WriteString(expression.Right.String())
+			}
+		}
+		sb.WriteString(")")
+	}
+	return sb.String()
 }
 
 func (self *Lex) AddToken(t TokenType) []Token {
@@ -165,7 +231,6 @@ func TokenFromByte(c byte) TokenType {
 		return TokQuote
 	}
 	panic(fmt.Sprintf("Byte %v cannot be converted to token", c))
-	return TokDot
 }
 
 func (self *Lex) ConsumeImpl(c byte) []Token {
@@ -286,7 +351,97 @@ func (self *Lex) Consume(c byte) []Token {
 	return newTokens
 }
 
-func main() {
+func AtomTypeFromToken(t TokenType) AtomType {
+	switch t {
+	case TokNumber:
+		return AtomNumber
+	case TokIdentifier:
+		return AtomIdentifier
+	case TokString:
+		return AtomString
+	}
+	panic(fmt.Sprintf("Cannot convert TokenType %v to AtomType", t))
+}
+
+func NewAtomExpression(lex Lex, token Token) Expression {
+	start, end := token.Offset, token.Offset+token.Length
+	atom := Atom{lex.Source.String()[start:end], AtomTypeFromToken(token.Type)}
+	return Expression{atom, nil, nil}
+}
+
+func NilExpression() Expression {
+	return Expression{Atom{"", AtomInvalid}, nil, nil}
+}
+
+func (self *Pars) NextToken(input io.Reader) (t Token, err error) {
+	for {
+		if len(self.tokens) > 0 {
+			token := self.tokens[0]
+			self.tokens = self.tokens[1:]
+			return token, nil
+		}
+		var c []byte = []byte{0}
+		_, err := input.Read(c)
+		if err != nil {
+			return Token{0, 0, TokInvalid}, err
+		}
+		self.tokens = append(self.tokens, self.Lex.Consume(c[0])...)
+	}
+}
+
+func (self *Pars) ParseNextExpression(input io.Reader, parentToken Token) (e Expression, err error) {
+	if parentToken.Type == TokRparen {
+		// Safety measure
+		panic(fmt.Sprintf("Delegated unexpected %v", parentToken))
+	}
+	var token = parentToken
+	if parentToken.Type == TokInvalid {
+		localToken, err := self.NextToken(input)
+		if err != nil {
+			return NilExpression(), err
+		}
+		token = localToken
+	}
+	if (token.Type == TokIdentifier || token.Type == TokNumber || token.Type == TokString) {
+		return NewAtomExpression(self.Lex, token), nil
+	} else if token.Type == TokLparen {
+		var rootExpression Expression
+		token, err := self.NextToken(input)
+		if err != nil {
+			return NilExpression(), err
+		}
+		if token.Type != TokRparen {
+			left, err := self.ParseNextExpression(input, token)
+			if err != nil {
+				return NilExpression(), err
+			}
+			rootExpression.Left = &left
+			var lastExpression *Expression = &rootExpression
+			for {
+				var expression Expression
+				lastExpression.Right = &expression
+				token, err := self.NextToken(input)
+				if err != nil {
+					return NilExpression(), err
+				}
+				if token.Type == TokRparen {
+					break
+				}
+				left, err := self.ParseNextExpression(input, token)
+				if err != nil {
+					return NilExpression(), err
+				}
+				expression.Left = &left
+				lastExpression = &expression
+			}
+		}
+		return rootExpression, nil
+	} else {
+		panic(fmt.Sprintf("Unsupported token %v", token))
+	}
+}
+
+func TestLex() {
 	var lex Lex
 	var tokensNum int
 	var tokens []Token
@@ -302,4 +457,14 @@ func main() {
 			tokens = tokens[:0]
 		}
 	}
+}
+
+func main() {
+	var parser Pars
+	expression, err := parser.ParseNextExpression(os.Stdin, Token{0, 0, TokInvalid})
+	if err != nil {
+		fmt.Printf(err.Error())
+		return
+	}
+	fmt.Printf("Expression: %v", expression)
 }
