@@ -25,7 +25,7 @@
      showgrid="true"
      inkscape:zoom="1.5518659"
      inkscape:cx="304.79438"
-     inkscape:cy="1314.2244"
+     inkscape:cy="1417.3261"
      inkscape:window-width="1279"
      inkscape:window-height="1038"
      inkscape:window-x="1280"
@@ -417,7 +417,7 @@
          id="tspan585-7"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.3595324"
-         y="14.544333">TokNotAToken</tspan></text>
+         y="14.544333">AtomInvalid</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5"
@@ -531,7 +531,7 @@
          id="tspan585-7-1"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.35953"
-         y="67.460991">TokNotAToken</tspan></text>
+         y="67.460991">AtomInvalid</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-29"
@@ -634,7 +634,7 @@
          id="tspan585-7-6"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.3595309"
-         y="41.002666">TokNumber&lt;2&gt;</tspan></text>
+         y="41.002666">AtomNumber&lt;2&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2"
@@ -748,7 +748,7 @@
          id="tspan585-7-6-5"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.63036"
-         y="78.044342">TokNumber&lt;2&gt;</tspan></text>
+         y="78.044342">AtomNumber&lt;2&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2-5"
@@ -845,7 +845,7 @@
          style="stroke-width:0.264583"
          x="53.213764"
          y="22.877958"
-         id="tspan50484">consideration, because it is &quot;TokNotAToken&quot;</tspan></text>
+         id="tspan50484">consideration, because its type is &quot;AtomInvalid&quot;</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
@@ -866,7 +866,7 @@
          style="stroke-width:0.264583"
          x="54.388134"
          y="48.224903"
-         id="tspan37454">because it is not a &quot;TokNotAToken&quot;</tspan></text>
+         id="tspan37454">because its type is not &quot;AtomInvalid&quot;</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
@@ -919,7 +919,7 @@
          id="tspan585-7-1-8"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.3595347"
-         y="104.50266">TokNotAToken</tspan></text>
+         y="104.50266">AtomInvalid</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
@@ -930,7 +930,7 @@
          id="tspan585-7-1-8-8"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.630363"
-         y="141.20193">TokNotAToken</tspan></text>
+         y="141.20193">AtomInvalid</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-29-4"
@@ -1022,7 +1022,7 @@
          id="tspan585-7-6-5-5"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.630363"
-         y="115.08601">TokNumber&lt;2&gt;</tspan></text>
+         y="115.08601">AtomNumber&lt;2&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2-5-0"
@@ -1259,7 +1259,7 @@
          id="tspan585-7-1-8-1"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.3595319"
-         y="231.50266">TokNotAToken</tspan></text>
+         y="231.50266">AtomInvalid</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-29-4-10"
@@ -1351,7 +1351,7 @@
          id="tspan585-7-6-5-5-2"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.630363"
-         y="242.086">TokNumber&lt;2&gt;</tspan></text>
+         y="242.086">AtomNumber&lt;2&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2-5-0-2"
@@ -1485,7 +1485,7 @@
          id="tspan585-7-1-8-5"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.3595319"
-         y="168.00266">TokNotAToken</tspan></text>
+         y="168.00266">AtomInvalid</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
@@ -1496,7 +1496,7 @@
          id="tspan585-7-1-8-8-1"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.3595343"
-         y="194.11859">TokNotAToken</tspan></text>
+         y="194.11859">AtomInvalid</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-29-4-1"
@@ -1588,7 +1588,7 @@
          id="tspan585-7-6-5-5-7"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.63036"
-         y="178.586">TokNumber&lt;2&gt;</tspan></text>
+         y="178.586">AtomNumber&lt;2&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2-5-0-6"
@@ -1702,7 +1702,7 @@
          id="tspan585-7-6-5-5-7-8"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.63036"
-         y="205.04433">TokString&lt;&quot;12&quot;&gt;</tspan></text>
+         y="205.04433">AtomString&lt;&quot;12&quot;&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2-5-0-6-8"
@@ -1816,7 +1816,7 @@
          id="tspan585-7-6-5-5-7-8-6"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.630367"
-         y="268.54431">TokString&lt;&quot;12&quot;&gt;</tspan></text>
+         y="268.54431">AtomString&lt;&quot;12&quot;&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2-5-0-6-8-9"
@@ -1930,7 +1930,7 @@
          id="tspan585-7-1-8-1-7"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="4.7137008"
-         y="295.00269">TokNotAToken</tspan></text>
+         y="295.00269">AtomInvalid</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-29-4-10-6"
@@ -2137,7 +2137,7 @@
          id="tspan585-7-6-5-5-7-8-6-4"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="54.984535"
-         y="332.04434">TokString&lt;&quot;12&quot;&gt;</tspan></text>
+         y="332.04434">AtomString&lt;&quot;12&quot;&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2-5-0-6-8-9-7"
@@ -2367,7 +2367,7 @@
          id="tspan585-7-1-8-1-7-4"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="54.984539"
-         y="305.58603">TokNotAToken</tspan></text>
+         y="305.58603">AtomInvalid</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-2-0-2-3-7"
@@ -2405,7 +2405,7 @@
          id="tspan585-7-1-8-1-7-0"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="4.7137003"
-         y="358.50269">TokNotAToken</tspan></text>
+         y="358.50269">AtomInvalid</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-29-4-10-6-6"
@@ -2505,7 +2505,7 @@
          id="tspan585-7-6-5-5-7-8-6-4-0"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="54.984535"
-         y="395.54434">TokString&lt;&quot;12&quot;&gt;</tspan></text>
+         y="395.54434">AtomString&lt;&quot;12&quot;&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2-5-0-6-8-9-7-3"
