@@ -10,11 +10,6 @@ type TokenType int
 
 const (
 	TokNumber TokenType = iota
-	TokBuiltinDefine
-	TokBuiltinLambda
-	TokBuiltinQuote
-	TokBuiltinCar
-	TokBuiltinCdr
 	TokIdentifier
 	TokString
 	TokLparen
@@ -32,12 +27,6 @@ func (token Token) String() string {
 	switch token.Type {
 	case TokNumber:
 		return "TokNumber"
-	case TokBuiltinDefine:
-		return "TokBuiltinDefine"
-	case TokBuiltinLambda:
-		return "TokBuiltinLambda"
-	case TokBuiltinQuote:
-		return "TokBuiltinQuote"
 	case TokIdentifier:
 		return "TokIdentifier"
 	case TokString:
@@ -48,11 +37,8 @@ func (token Token) String() string {
 		return "TokRparen"
 	case TokDot:
 		return "TokDot"
-	case TokBuiltinCar:
-		return "TokBuiltinCar"
-	case TokBuiltinCdr:
-		return "TokBuiltinCdr"
 	}
+	panic(fmt.Sprintf("Unknown token type %v", token))
 	return "<?>"
 }
 
@@ -122,7 +108,6 @@ func (self *Lex) BeginIdentifier() {
 }
 
 func (self *Lex) BeginString() []Token {
-	panic("")
 	var newTokens []Token
 	if self.State != LexIdle {
 		newTokens = append(newTokens, self.Tokens[len(self.Tokens)-1])
@@ -178,41 +163,6 @@ func TokenFromByte(c byte) TokenType {
 	return TokDot
 }
 
-func (self Lex) IsBuiltinComposition(c byte) bool {
-	var builtins []string = []string{
-		"car",
-		"cdr",
-		"quote",
-		"define",
-		"lambda",
-	}
-	//var largestLength = len(builtins[len(builtins)-1])
-	for _, builtin := range(builtins) {
-		if self.Source.String()[self.Source.Len()-self.Tokens[len(self.Tokens)-1].Length:] + string([]byte{c}) == builtin {
-			return true
-		}
-	}
-	return false
-}
-
-func (self Lex) BuiltinWithByte(c byte) TokenType {
-	literal := self.Source.String()[self.Source.Len()-self.Tokens[len(self.Tokens)-1].Length:] + string([]byte{c})
-	switch literal {
-	case "car":
-		return TokBuiltinCar
-	case "cdr":
-		return TokBuiltinCdr
-	case "quote":
-		return TokBuiltinQuote
-	case "define":
-		return TokBuiltinDefine
-	case "lambda":
-		return TokBuiltinLambda
-	}
-	panic(fmt.Sprintf("No known conversion to TokenType for \"%v\"", literal))
-	return TokBuiltinLambda
-}
-
 func (self *Lex) ConsumeImpl(c byte) []Token {
 	// TODO support quote syntax like "(car '(1 2 3))"
 	switch self.State {
@@ -259,9 +209,7 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			panic(fmt.Sprintf("unexpected byte '%v'", c))
 		}
 	case LexIdentifier:
-		if self.IsBuiltinComposition(c) {
-			return self.FinishBuiltin(self.BuiltinWithByte(c))
-		} else if IsSingleCharToken(c) {
+		if IsSingleCharToken(c) {
 			return self.AddToken(TokenFromByte(c))
 		} else if c == '"' {
 			self.BeginString()

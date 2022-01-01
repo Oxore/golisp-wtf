@@ -1,17 +1,9 @@
 program        = { expression } .
 
-expression     = BUILTIN
-               | IDENTIFIER
+expression     = IDENTIFIER
                | NUMBER
                | STRING
                | [ "'" ] "(" expression { [ "." ] expression } [ "." ] ")" .
-
-BUILTIN        = "define"
-               | "lambda"
-               | "quote"
-               | "car"
-               | "cdr"
-               .
 
 NUMBER         = DIGIT { DIGIT } [ "." DIGIT { DIGIT } ] .
 STRING         = """" { CHARACTER } """" .
