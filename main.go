@@ -1,4 +1,7 @@
 package main
+// TODO Floating point numbers
+// TODO Quote expressions
+// TODO Errors propagation
 
 import (
 	"fmt"
@@ -234,7 +237,6 @@ func TokenFromByte(c byte) TokenType {
 }
 
 func (self *Lex) ConsumeImpl(c byte) []Token {
-	// TODO support quote syntax like "(car '(1 2 3))"
 	switch self.State {
 	case LexIdle:
 		if IsSingleCharToken(c) {

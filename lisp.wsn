@@ -3,9 +3,9 @@ program        = { expression } .
 expression     = IDENTIFIER
                | NUMBER
                | STRING
-               | [ "'" ] "(" expression { [ "." ] expression } [ "." ] ")" .
+               | [ "'" ] "(" expression { expression } [ "." expression ] ")" .
 
-NUMBER         = DIGIT { DIGIT } [ "." DIGIT { DIGIT } ] .
+NUMBER         = DIGIT { DIGIT } .
 STRING         = """" { CHARACTER } """" .
 IDENTIFIER     = ALPHANUM { ALPHANUM } .
 COMMENT        = ";" { CHARACTER } 0x0A .
