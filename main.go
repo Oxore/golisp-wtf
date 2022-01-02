@@ -454,6 +454,30 @@ func (self *Pars) ParseNextExpression(input io.Reader, parentToken Token) (e Exp
 			}
 		}
 		return rootExpression, nil
+	} else if token.Type == TokQuote {
+		expression := Expression{
+			Atom{"", AtomInvalid},
+			&Expression{
+				Atom{"quote", AtomIdentifier},
+				&Expression{
+					Atom{"", AtomInvalid},
+					nil,
+					nil,
+				},
+				nil,
+			},
+			nil,
+		}
+		right, err := self.ParseNextExpression(input, Token{0, 0, TokInvalid})
+		if err != nil {
+			return NilExpression(), err
+		}
+		expression.Right = &Expression{
+			Atom{"", AtomInvalid},
+			&right,
+			nil,
+		}
+		return expression, nil
 	} else {
 		panic(fmt.Sprintf("Unsupported token %v", token))
 	}
