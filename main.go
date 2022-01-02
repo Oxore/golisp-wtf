@@ -242,7 +242,7 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 	case LexIdle:
 		if IsSingleCharToken(c) {
 			return self.AddToken(TokenFromByte(c))
-		} else if c == ' ' || c == 0x0A || c == 0x0D {
+		} else if c == ' ' || c == 0x0A || c == 0x0D || c == '\t' {
 			// Skip
 		} else if IsNumeric(c) {
 			self.BeginNumber()
@@ -261,7 +261,7 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			return self.AddToken(TokenFromByte(c))
 		} else if c == '"' {
 			self.BeginString()
-		} else if c == ' ' || c == 0x0A || c == 0x0D {
+		} else if c == ' ' || c == 0x0A || c == 0x0D || c == '\t' {
 			if self.State != LexIdle {
 				self.State = LexIdle
 				return self.Tokens[len(self.Tokens)-1:]
@@ -286,7 +286,7 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			return self.AddToken(TokenFromByte(c))
 		} else if c == '"' {
 			self.BeginString()
-		} else if c == ' ' || c == 0x0A || c == 0x0D {
+		} else if c == ' ' || c == 0x0A || c == 0x0D || c == '\t' {
 			if self.State != LexIdle {
 				self.State = LexIdle
 				return self.Tokens[len(self.Tokens)-1:]
