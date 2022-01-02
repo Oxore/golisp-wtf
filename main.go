@@ -1,13 +1,14 @@
 package main
+
 // TODO Floating point numbers
 // TODO Quote expressions
 // TODO Errors propagation
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"strings"
-	"io"
 )
 
 type TokenType int
@@ -62,11 +63,11 @@ const (
 
 type Atom struct {
 	Representation string
-	Type AtomType
+	Type           AtomType
 }
 
 type Expression struct {
-	Atom Atom
+	Atom  Atom
 	Left  *Expression
 	Right *Expression
 }
@@ -120,13 +121,13 @@ func (lex Lex) String() string {
 func (atom Atom) String() string {
 	switch atom.Type {
 	case AtomInvalid:
-		return fmt.Sprintf("AtomInvalid<%v>", atom.Representation);
+		return fmt.Sprintf("AtomInvalid<%v>", atom.Representation)
 	case AtomNumber:
-		return fmt.Sprintf("%v", atom.Representation);
+		return fmt.Sprintf("%v", atom.Representation)
 	case AtomIdentifier:
-		return fmt.Sprintf("%v", atom.Representation);
+		return fmt.Sprintf("%v", atom.Representation)
 	case AtomString:
-		return fmt.Sprintf("%v", atom.Representation);
+		return fmt.Sprintf("%v", atom.Representation)
 	}
 	panic(fmt.Sprintf("Unknown atom type %v", atom.Type))
 }
@@ -404,7 +405,7 @@ func (self *Pars) ParseNextExpression(input io.Reader, parentToken Token) (e Exp
 		}
 		token = localToken
 	}
-	if (token.Type == TokIdentifier || token.Type == TokNumber || token.Type == TokString) {
+	if token.Type == TokIdentifier || token.Type == TokNumber || token.Type == TokString {
 		return NewAtomExpression(self.Lex, token), nil
 	} else if token.Type == TokLparen {
 		var rootExpression Expression
