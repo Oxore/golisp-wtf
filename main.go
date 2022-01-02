@@ -426,15 +426,31 @@ func (self *Pars) ParseNextExpression(input io.Reader, parentToken Token) (e Exp
 				if err != nil {
 					return NilExpression(), err
 				}
-				if token.Type == TokRparen {
+				if token.Type == TokDot {
+					right, err := self.ParseNextExpression(input, Token{0, 0, TokInvalid})
+					if err != nil {
+						return NilExpression(), err
+					}
+					expression = right
+					token, err := self.NextToken(input)
+					if err != nil {
+						return NilExpression(), err
+					}
+					if token.Type != TokRparen {
+						panic(fmt.Sprintf("Unexpected token %v, expected TokRparen<)>", token))
+					}
 					break
+				} else {
+					if token.Type == TokRparen {
+						break
+					}
+					left, err := self.ParseNextExpression(input, token)
+					if err != nil {
+						return NilExpression(), err
+					}
+					expression.Left = &left
+					lastExpression = &expression
 				}
-				left, err := self.ParseNextExpression(input, token)
-				if err != nil {
-					return NilExpression(), err
-				}
-				expression.Left = &left
-				lastExpression = &expression
 			}
 		}
 		return rootExpression, nil
@@ -463,10 +479,12 @@ func TestLex() {
 
 func main() {
 	var parser Pars
-	expression, err := parser.ParseNextExpression(os.Stdin, Token{0, 0, TokInvalid})
-	if err != nil {
-		fmt.Printf(err.Error())
-		return
+	for {
+		expression, err := parser.ParseNextExpression(os.Stdin, Token{0, 0, TokInvalid})
+		if err != nil {
+			fmt.Printf(err.Error())
+			return
+		}
+		fmt.Printf("Expression: %v\n", expression)
 	}
-	fmt.Printf("Expression: %v", expression)
 }
