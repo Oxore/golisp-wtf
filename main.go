@@ -212,8 +212,12 @@ func IsAlphabetic(c byte) bool {
 		c == '^' || c == '#'
 }
 
-func IsCharacter(c byte) bool {
-	return c == 0x09 || (c >= ' ' && c <= '~')
+func IsCommentCharacter(c byte) bool {
+	return c == '\t' || (c >= ' ' && c <= '~')
+}
+
+func IsStringCharacter(c byte) bool {
+	return c == '\t' || c == '\n' || c == '\r' || (c >= ' ' && c <= '~')
 }
 
 func IsAlphaNumeric(c byte) bool {
@@ -302,9 +306,9 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			panic(fmt.Sprintf("unexpected byte '%v'", c))
 		}
 	case LexComment:
-		if c == 0x0A {
+		if c == 0x0A || c == 0x0D {
 			self.State = LexIdle
-		} else if IsCharacter(c) {
+		} else if IsCommentCharacter(c) {
 			// Skip
 		} else {
 			// TODO raise error
@@ -315,7 +319,7 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			token := self.Tokens[len(self.Tokens)-1]
 			token.Length += 1
 			self.Tokens[len(self.Tokens)-1] = token
-		} else if IsCharacter(c) {
+		} else if IsStringCharacter(c) {
 			token := self.Tokens[len(self.Tokens)-1]
 			token.Length += 1
 			self.Tokens[len(self.Tokens)-1] = token
@@ -336,7 +340,7 @@ func (self *Lex) ConsumeImpl(c byte) []Token {
 			token.Length += 1
 			self.Tokens[len(self.Tokens)-1] = token
 			self.State = LexStringEscaped
-		} else if IsCharacter(c) {
+		} else if IsStringCharacter(c) {
 			token := self.Tokens[len(self.Tokens)-1]
 			token.Length += 1
 			self.Tokens[len(self.Tokens)-1] = token
