@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"strings"
+	"strconv"
 )
 
 type TokenType int
@@ -59,6 +60,7 @@ const (
 
 type Atom struct {
 	Representation string
+	Offset         int
 	Type           AtomType
 }
 
@@ -77,6 +79,40 @@ type Error struct {
 	LineNumber   int
 	OffsetInLine int
 	Text         string
+}
+
+type Function interface {
+	Exec(args Expression, parentEnv Interp)
+}
+
+type ValueType int
+
+const (
+	ValNull ValueType = iota
+	ValBool
+	ValPair
+	ValSymbol
+	ValNumber
+	ValChar
+	ValString
+	ValProc
+)
+
+type Value struct {
+	Type ValueType
+	Bool bool
+	PairLeft *Value
+	PairRight *Value
+	Symbol string
+	Number int
+	Char byte
+	StringData string
+	Proc string // TODO
+}
+
+type Interp struct {
+	Source *strings.Builder
+	Table map[string] Value
 }
 
 func (e Error) Error() string {
@@ -104,6 +140,28 @@ func NewError(source string, offset int, text string) Error {
 		}
 	}
 	return Error{line, offsetInLine + 1, text}
+}
+
+func (v Value) String() string {
+	switch v.Type {
+	case ValNull:
+		return fmt.Sprintf("()")
+	case ValBool:
+		return fmt.Sprintf("ValBool<%t>", v.Bool)
+	case ValPair:
+		return fmt.Sprintf("ValPair<(%v . %v)>", v.PairLeft, v.PairRight)
+	case ValSymbol:
+		return fmt.Sprintf("ValSymbol<%s>", v.Symbol)
+	case ValNumber:
+		return fmt.Sprintf("ValNumber<%d>", v.Number)
+	case ValChar:
+		return fmt.Sprintf("ValChar<%c>", v.Char)
+	case ValString:
+		return fmt.Sprintf("ValString<%s>", v.StringData)
+	case ValProc:
+		panic("String() for ValProc is not implemented")
+	}
+	panic(fmt.Sprintf("Unknown Value type %v", v.Type))
 }
 
 func (token Token) String() string {
@@ -390,20 +448,20 @@ func AtomTypeFromToken(t TokenType) AtomType {
 
 func AtomFromToken(lex Lex, token Token) Expression {
 	start, end := token.Offset, token.Offset+token.Length
-	atom := Atom{lex.Source.String()[start:end], AtomTypeFromToken(token.Type)}
+	atom := Atom{lex.Source.String()[start:end], token.Offset, AtomTypeFromToken(token.Type)}
 	return Expression{atom, nil, nil}
 }
 
 func ExpressionNil() Expression {
-	return Expression{Atom{"", AtomInvalid}, nil, nil}
+	return Expression{Atom{}, nil, nil}
 }
 
 func NewNode(left, right *Expression) *Expression {
-	return &Expression{Atom{"", AtomInvalid}, left, right}
+	return &Expression{Atom{}, left, right}
 }
 
-func NewAtom(repr string, t AtomType) *Expression {
-	return &Expression{Atom{repr, t}, nil, nil}
+func NewAtom(repr string, offset int, t AtomType) *Expression {
+	return &Expression{Atom{repr, offset, t}, nil, nil}
 }
 
 func (self *Pars) NextToken(input io.Reader) (Token, error) {
@@ -506,13 +564,47 @@ func (self *Pars) ParseNextWithToken(input io.Reader, parentToken Token) (Expres
 		return *NewNode(&left, right), err
 	case TokQuote:
 		quoted, err := self.ParseNext(input)
-		return *NewNode(NewAtom("quote", AtomIdentifier), NewNode(&quoted, nil)), err
+		return *NewNode(NewAtom("quote", token.Offset, AtomIdentifier), NewNode(&quoted, nil)), err
 	}
 	return ExpressionNil(), self.NewUnexpectedTokenError(token)
 }
 
 func (self *Pars) ParseNext(input io.Reader) (Expression, error) {
 	return self.ParseNextWithToken(input, Token{0, 0, TokInvalid})
+}
+
+func (self *Interp) Eval(expression Expression) (*Value, error) {
+	switch expression.Atom.Type {
+	case AtomIdentifier:
+		if "#f" == expression.Atom.Representation {
+			return &Value{Type: ValBool, Bool: false}, nil
+		}
+		if "#t" == expression.Atom.Representation {
+			return &Value{Type: ValBool, Bool: true}, nil
+		}
+		value, ok := self.Table[expression.Atom.Representation]
+		if ok == false {
+			return nil, NewError(
+				self.Source.String(),
+				expression.Atom.Offset,
+				fmt.Sprintf("Unbound variable %v", expression.Atom.Representation))
+		}
+		return &value, nil
+	case AtomNumber:
+		number, err := strconv.Atoi(expression.Atom.Representation)
+		if err != nil {
+			return nil, NewError(
+				self.Source.String(),
+				expression.Atom.Offset,
+				fmt.Sprintf("Can't parse number %v", expression.Atom.Representation))
+		}
+		return &Value{Type: ValNumber, Number: number}, nil
+	case AtomString:
+		return &Value{Type: ValString, StringData: expression.Atom.Representation}, nil
+	case AtomInvalid:
+		panic("Unimplemented complex expression evaluation")
+	}
+	panic("Unimplemented atom type evaluation")
 }
 
 func TestLex() {
@@ -550,6 +642,26 @@ func TestPars() {
 	}
 }
 
+func TestEval() {
+	var parser Pars
+	var interpreter Interp
+	interpreter.Source = &parser.Lex.Source
+	for {
+		expression, err := parser.ParseNext(os.Stdin)
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			fmt.Printf("Parsing error: %s\n", err.Error())
+			continue
+		}
+		result, err := interpreter.Eval(expression)
+		if err != nil {
+			fmt.Printf("Eval error: %s\n", err.Error())
+		}
+		fmt.Printf("Eval result: %v\n", result)
+	}
+}
+
 func main() {
-	TestPars()
+	TestEval()
 }
