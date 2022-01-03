@@ -81,10 +81,6 @@ type Error struct {
 	Text         string
 }
 
-type Function interface {
-	Exec(args Expression, parentEnv Interp)
-}
-
 type ValueType int
 
 const (
@@ -107,7 +103,7 @@ type Value struct {
 	Number int
 	Char byte
 	StringData string
-	Proc string // TODO
+	Proc func(Value, Interp) (Value, error)
 }
 
 type Interp struct {
@@ -142,26 +138,48 @@ func NewError(source string, offset int, text string) Error {
 	return Error{line, offsetInLine + 1, text}
 }
 
+func (t ValueType) String() string {
+	switch t {
+	case ValNull:
+		return "ValNull"
+	case ValBool:
+		return "ValBool"
+	case ValPair:
+		return "ValPair"
+	case ValSymbol:
+		return "ValSymbol"
+	case ValNumber:
+		return "ValNumber"
+	case ValChar:
+		return "ValChar"
+	case ValString:
+		return "ValString"
+	case ValProc:
+		return "ValProc"
+	}
+	panic(fmt.Sprintf("Unknown Value type %d", t))
+}
+
 func (v Value) String() string {
 	switch v.Type {
 	case ValNull:
-		return fmt.Sprintf("()")
+		return fmt.Sprintf("%v<()>", v.Type)
 	case ValBool:
-		return fmt.Sprintf("ValBool<%t>", v.Bool)
+		return fmt.Sprintf("%v<%t>", v.Type, v.Bool)
 	case ValPair:
-		return fmt.Sprintf("ValPair<(%v . %v)>", v.PairLeft, v.PairRight)
+		return fmt.Sprintf("%v<(%v . %v)>", v.Type, v.PairLeft, v.PairRight)
 	case ValSymbol:
-		return fmt.Sprintf("ValSymbol<%s>", v.Symbol)
+		return fmt.Sprintf("%v<%s>", v.Type, v.Symbol)
 	case ValNumber:
-		return fmt.Sprintf("ValNumber<%d>", v.Number)
+		return fmt.Sprintf("%v<%d>", v.Type, v.Number)
 	case ValChar:
-		return fmt.Sprintf("ValChar<%c>", v.Char)
+		return fmt.Sprintf("%v<%c>", v.Type, v.Char)
 	case ValString:
-		return fmt.Sprintf("ValString<%s>", v.StringData)
+		return fmt.Sprintf("%v<%s>", v.Type, v.StringData)
 	case ValProc:
 		panic("String() for ValProc is not implemented")
 	}
-	panic(fmt.Sprintf("Unknown Value type %v", v.Type))
+	panic(fmt.Sprintf("Unknown Value type %d", v.Type))
 }
 
 func (token Token) String() string {
@@ -573,38 +591,84 @@ func (self *Pars) ParseNext(input io.Reader) (Expression, error) {
 	return self.ParseNextWithToken(input, Token{0, 0, TokInvalid})
 }
 
-func (self *Interp) Eval(expression Expression) (*Value, error) {
+func IsNilExpression(e Expression) bool {
+	return e.Atom.Type == AtomInvalid && e.Right == nil && e.Left == nil
+}
+
+func (self *Interp) EvalRight(expression Expression) (Value, error) {
+	pseudoRoot := Value{Type: ValPair, PairRight: &Value{Type: ValNull}}
+	lastPair := &pseudoRoot
+	for {
+		if lastPair.Type != ValPair {
+			panic("Not ValPair when it has to be")
+		}
+		value := Value{Type: ValPair}
+		if expression.Left != nil {
+			left, err:= self.Eval(*expression.Left)
+			if err != nil {
+				return *pseudoRoot.PairRight, err
+			}
+			value.PairLeft = &left
+		}
+		lastPair.PairRight = &value
+		if expression.Right == nil {
+			return *pseudoRoot.PairRight, nil
+		}
+		if IsNilExpression(*expression.Right) {
+			return *pseudoRoot.PairRight, nil
+		}
+		if expression.Right.Atom.Type != AtomInvalid {
+			right, err:= self.Eval(*expression.Right)
+			value.PairRight = &right
+			return *pseudoRoot.PairRight, err
+		}
+		lastPair = &value
+		expression = *expression.Right
+	}
+}
+
+func (self *Interp) Eval(expression Expression) (Value, error) {
 	switch expression.Atom.Type {
 	case AtomIdentifier:
 		if "#f" == expression.Atom.Representation {
-			return &Value{Type: ValBool, Bool: false}, nil
+			return Value{Type: ValBool, Bool: false}, nil
 		}
 		if "#t" == expression.Atom.Representation {
-			return &Value{Type: ValBool, Bool: true}, nil
+			return Value{Type: ValBool, Bool: true}, nil
 		}
 		value, ok := self.Table[expression.Atom.Representation]
 		if ok == false {
-			return nil, NewError(
+			return Value{Type: ValNull}, NewError(
 				self.Source.String(),
 				expression.Atom.Offset,
-				fmt.Sprintf("Unbound variable %v", expression.Atom.Representation))
+				fmt.Sprintf("Unbound variable \"%v\"", expression.Atom.Representation))
 		}
-		return &value, nil
+		return value, nil
 	case AtomNumber:
 		number, err := strconv.Atoi(expression.Atom.Representation)
 		if err != nil {
-			return nil, NewError(
+			return Value{Type: ValNull}, NewError(
 				self.Source.String(),
 				expression.Atom.Offset,
 				fmt.Sprintf("Can't parse number %v", expression.Atom.Representation))
 		}
-		return &Value{Type: ValNumber, Number: number}, nil
+		return Value{Type: ValNumber, Number: number}, nil
 	case AtomString:
-		return &Value{Type: ValString, StringData: expression.Atom.Representation}, nil
+		return Value{Type: ValString, StringData: expression.Atom.Representation}, nil
 	case AtomInvalid:
-		panic("Unimplemented complex expression evaluation")
+		left, err := self.Eval(*expression.Left)
+		if err != nil {
+			return Value{Type: ValNull}, err
+		}
+		if left.Type == ValProc {
+			right, err := self.EvalRight(*expression.Right)
+			if err != nil {
+				return Value{Type: ValNull}, err
+			}
+			return left.Proc(right, *self)
+		}
 	}
-	panic("Unimplemented atom type evaluation")
+	panic(fmt.Sprintf("Unimplemented atom type evaluation %v", expression.Atom))
 }
 
 func TestLex() {
@@ -643,9 +707,46 @@ func TestPars() {
 }
 
 func TestEval() {
+	plusFn := func(arg Value, interp Interp) (Value, error) {
+		var acc int
+		for {
+			if arg.Type != ValPair {
+				return Value{Type: ValNull}, NewError(
+					interp.Source.String(),
+					0, // TODO pass offset
+					fmt.Sprintf(
+						"Unexpected arg carrier type %v, expected ValPair",
+						arg.Type))
+			}
+			if arg.PairLeft == nil {
+				return Value{Type: ValNull}, NewError(
+					interp.Source.String(),
+					0, // TODO pass offset
+					fmt.Sprintf("Unexpected value type ValNull, expected ValPair"))
+			}
+			left := *arg.PairLeft
+			if left.Type != ValNumber {
+				return Value{Type: ValNull}, NewError(
+					interp.Source.String(),
+					0, // TODO pass offset
+					fmt.Sprintf(
+						"Unexpected value type %v, expected ValNumber",
+						arg.Type))
+			}
+			acc += left.Number
+			if arg.PairRight == nil || arg.PairRight.Type == ValNull {
+				break
+			}
+			arg = *arg.PairRight
+		}
+		return Value{Type: ValNumber, Number: acc}, nil
+	}
 	var parser Pars
 	var interpreter Interp
 	interpreter.Source = &parser.Lex.Source
+	interpreter.Table = map[string]Value{
+		"+": Value{Type: ValProc, Proc: plusFn},
+		}
 	for {
 		expression, err := parser.ParseNext(os.Stdin)
 		if err == io.EOF {
