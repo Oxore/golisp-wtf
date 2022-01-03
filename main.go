@@ -1,6 +1,5 @@
 package main
 
-
 import (
 	"fmt"
 	"io"
@@ -46,7 +45,7 @@ const (
 type Lex struct {
 	Source strings.Builder
 	Tokens []Token
-	State  LexState
+	state  LexState
 }
 
 type AtomType int
@@ -71,7 +70,6 @@ type Expression struct {
 
 type Pars struct {
 	Lex    Lex
-	Tree   []Expression
 	tokens []Token
 }
 
@@ -82,7 +80,7 @@ type Error struct {
 }
 
 func (e Error) Error() string {
-	return fmt.Sprintf("%v:%v: %v", e.LineNumber, e.OffsetInLine, e.Text)
+	return fmt.Sprintf("<stdin>:%v:%v: %v", e.LineNumber, e.OffsetInLine, e.Text)
 }
 
 func NewError(source string, offset int, text string) Error {
@@ -97,15 +95,15 @@ func NewError(source string, offset int, text string) Error {
 		}
 		offsetInLine += 1
 		if prev == '\r' && c == '\n' {
-			// Skip, because line was already incremented while we
-			// were parsing single '\r' (see next else-if branch).
+			// Do not increment line number, because line was already incremented while
+			// we were parsing single '\r' (see next else-if branch).
 			offsetInLine = 0
 		} else if c == '\r' || c == '\n' {
 			line += 1
 			offsetInLine = 0
 		}
 	}
-	return Error{line, offsetInLine+1, text}
+	return Error{line, offsetInLine + 1, text}
 }
 
 func (token Token) String() string {
@@ -152,11 +150,7 @@ func (atom Atom) String() string {
 	switch atom.Type {
 	case AtomInvalid:
 		return fmt.Sprintf("AtomInvalid<%v>", atom.Representation)
-	case AtomNumber:
-		return fmt.Sprintf("%v", atom.Representation)
-	case AtomIdentifier:
-		return fmt.Sprintf("%v", atom.Representation)
-	case AtomString:
+	case AtomNumber, AtomIdentifier, AtomString:
 		return fmt.Sprintf("%v", atom.Representation)
 	}
 	panic(fmt.Sprintf("Unknown atom type %v", atom.Type))
@@ -188,8 +182,8 @@ func (expression Expression) String() string {
 
 func (self *Lex) AddToken(t TokenType) []Token {
 	var newTokens []Token
-	if self.State != LexIdle {
-		self.State = LexIdle
+	if self.state != LexIdle {
+		self.state = LexIdle
 		newTokens = append(newTokens, self.Tokens[len(self.Tokens)-1])
 	}
 	newToken := Token{self.Source.Len(), 1, t}
@@ -201,23 +195,23 @@ func (self *Lex) AddToken(t TokenType) []Token {
 func (self *Lex) BeginNumber() {
 	newToken := Token{self.Source.Len(), 1, TokNumber}
 	self.Tokens = append(self.Tokens, newToken)
-	self.State = LexNumber
+	self.state = LexNumber
 }
 
 func (self *Lex) BeginIdentifier() {
 	newToken := Token{self.Source.Len(), 1, TokIdentifier}
 	self.Tokens = append(self.Tokens, newToken)
-	self.State = LexIdentifier
+	self.state = LexIdentifier
 }
 
 func (self *Lex) BeginString() []Token {
 	var newTokens []Token
-	if self.State != LexIdle {
+	if self.state != LexIdle {
 		newTokens = append(newTokens, self.Tokens[len(self.Tokens)-1])
 	}
 	newToken := Token{self.Source.Len(), 1, TokString}
 	self.Tokens = append(self.Tokens, newToken)
-	self.State = LexString
+	self.state = LexString
 	return newTokens
 }
 
@@ -226,7 +220,7 @@ func (self *Lex) FinishBuiltin(t TokenType) []Token {
 	token.Length += 1
 	token.Type = t
 	self.Tokens[len(self.Tokens)-1] = token
-	self.State = LexIdle
+	self.state = LexIdle
 	return []Token{token}
 }
 
@@ -246,6 +240,10 @@ func IsCommentCharacter(c byte) bool {
 	return c == '\t' || (c >= ' ' && c <= '~')
 }
 
+func IsPrintableCharacter(c byte) bool {
+	return c >= ' ' && c <= '~'
+}
+
 func IsStringCharacter(c byte) bool {
 	return c == '\t' || c == '\n' || c == '\r' || (c >= ' ' && c <= '~')
 }
@@ -259,20 +257,39 @@ func IsSingleCharToken(c byte) bool {
 }
 
 func TokenFromByte(c byte) TokenType {
-	if c == '(' {
+	switch c {
+	case '(':
 		return TokLparen
-	} else if c == ')' {
+	case ')':
 		return TokRparen
-	} else if c == '.' {
+	case '.':
 		return TokDot
-	} else if c == '\'' {
+	case '\'':
 		return TokQuote
 	}
 	panic(fmt.Sprintf("Byte %v cannot be converted to token", c))
 }
 
+func (self Lex) NewUnexpectedByteError(c byte) error {
+	var text string
+	if IsPrintableCharacter(c) {
+		text = fmt.Sprintf("unexpected byte '%c'", c)
+	} else {
+		text = fmt.Sprintf("unexpected byte 0x%X", c)
+	}
+	return NewError(self.Source.String(), self.Source.Len(), text)
+}
+
+func (self *Lex) LastTokenMut() *Token {
+	return &self.Tokens[len(self.Tokens)-1]
+}
+
+func (self Lex) LastToken() Token {
+	return self.Tokens[len(self.Tokens)-1]
+}
+
 func (self *Lex) ConsumeImpl(c byte) ([]Token, error) {
-	switch self.State {
+	switch self.state {
 	case LexIdle:
 		if IsSingleCharToken(c) {
 			return self.AddToken(TokenFromByte(c)), nil
@@ -285,12 +302,9 @@ func (self *Lex) ConsumeImpl(c byte) ([]Token, error) {
 		} else if c == '"' {
 			return self.BeginString(), nil
 		} else if c == ';' {
-			self.State = LexComment
+			self.state = LexComment
 		} else {
-			return []Token{}, NewError(
-				self.Source.String(),
-				self.Source.Len(),
-				fmt.Sprintf("unexpected byte '%v'", c))
+			return []Token{}, self.NewUnexpectedByteError(c)
 		}
 	case LexNumber:
 		if IsSingleCharToken(c) {
@@ -298,26 +312,19 @@ func (self *Lex) ConsumeImpl(c byte) ([]Token, error) {
 		} else if c == '"' {
 			self.BeginString()
 		} else if c == ' ' || c == 0x0A || c == 0x0D || c == '\t' {
-			if self.State != LexIdle {
-				self.State = LexIdle
-				return self.Tokens[len(self.Tokens)-1:], nil
-			}
+			self.state = LexIdle
+			return []Token{self.LastToken()}, nil
 		} else if IsNumeric(c) {
-			token := self.Tokens[len(self.Tokens)-1]
-			token.Length += 1
-			self.Tokens[len(self.Tokens)-1] = token
+			self.LastTokenMut().Length += 1
 		} else if IsAlphaNumeric(c) {
-			token := self.Tokens[len(self.Tokens)-1]
-			token.Length += 1
-			token.Type = TokIdentifier
-			self.Tokens[len(self.Tokens)-1] = token
+			self.LastTokenMut().Length += 1
+			self.LastTokenMut().Type = TokIdentifier
 		} else if c == ';' {
-			self.State = LexComment
+			self.state = LexComment
+			return []Token{self.LastToken()}, nil
 		} else {
-			return []Token{}, NewError(
-				self.Source.String(),
-				self.Source.Len(),
-				fmt.Sprintf("unexpected byte '%v'", c))
+			self.state = LexIdle
+			return []Token{self.LastToken()}, self.NewUnexpectedByteError(c)
 		}
 	case LexIdentifier:
 		if IsSingleCharToken(c) {
@@ -325,70 +332,50 @@ func (self *Lex) ConsumeImpl(c byte) ([]Token, error) {
 		} else if c == '"' {
 			self.BeginString()
 		} else if c == ' ' || c == 0x0A || c == 0x0D || c == '\t' {
-			if self.State != LexIdle {
-				self.State = LexIdle
+			if self.state != LexIdle {
+				self.state = LexIdle
 				return self.Tokens[len(self.Tokens)-1:], nil
 			}
 		} else if IsAlphaNumeric(c) {
-			token := self.Tokens[len(self.Tokens)-1]
-			token.Length += 1
-			self.Tokens[len(self.Tokens)-1] = token
+			self.LastTokenMut().Length += 1
 		} else if c == ';' {
-			self.State = LexComment
+			self.state = LexComment
+			return []Token{self.LastToken()}, nil
 		} else {
-			return []Token{}, NewError(
-				self.Source.String(),
-				self.Source.Len(),
-				fmt.Sprintf("unexpected byte '%v'", c))
+			self.state = LexIdle
+			return []Token{self.LastToken()}, self.NewUnexpectedByteError(c)
 		}
 	case LexComment:
 		if c == 0x0A || c == 0x0D {
-			self.State = LexIdle
+			self.state = LexIdle
 		} else if IsCommentCharacter(c) {
 			// Skip
 		} else {
-			return []Token{}, NewError(
-				self.Source.String(),
-				self.Source.Len(),
-				fmt.Sprintf("unexpected byte '%v'", c))
+			self.state = LexIdle
+			return []Token{}, self.NewUnexpectedByteError(c)
 		}
 	case LexStringEscaped:
-		if c == '\\' {
-			token := self.Tokens[len(self.Tokens)-1]
-			token.Length += 1
-			self.Tokens[len(self.Tokens)-1] = token
-		} else if IsStringCharacter(c) {
-			token := self.Tokens[len(self.Tokens)-1]
-			token.Length += 1
-			self.Tokens[len(self.Tokens)-1] = token
+		if IsStringCharacter(c) {
+			self.LastTokenMut().Length += 1
+			self.state = LexString
 		} else {
-			return []Token{}, NewError(
-				self.Source.String(),
-				self.Source.Len(),
-				fmt.Sprintf("unexpected byte '%v'", c))
+			self.state = LexIdle
+			return []Token{self.LastToken()}, self.NewUnexpectedByteError(c)
 		}
-		self.State = LexString
+		self.state = LexString
 	case LexString:
 		if c == '"' {
-			token := self.Tokens[len(self.Tokens)-1]
-			token.Length += 1
-			self.Tokens[len(self.Tokens)-1] = token
-			self.State = LexIdle
+			self.LastTokenMut().Length += 1
+			self.state = LexIdle
 			return self.Tokens[len(self.Tokens)-1:], nil
 		} else if c == '\\' {
-			token := self.Tokens[len(self.Tokens)-1]
-			token.Length += 1
-			self.Tokens[len(self.Tokens)-1] = token
-			self.State = LexStringEscaped
+			self.LastTokenMut().Length += 1
+			self.state = LexStringEscaped
 		} else if IsStringCharacter(c) {
-			token := self.Tokens[len(self.Tokens)-1]
-			token.Length += 1
-			self.Tokens[len(self.Tokens)-1] = token
+			self.LastTokenMut().Length += 1
 		} else {
-			return []Token{}, NewError(
-				self.Source.String(),
-				self.Source.Len(),
-				fmt.Sprintf("unexpected byte '%v'", c))
+			self.state = LexIdle
+			return []Token{self.LastToken()}, self.NewUnexpectedByteError(c)
 		}
 	}
 	return []Token{}, nil
@@ -422,7 +409,7 @@ func NilExpression() Expression {
 	return Expression{Atom{"", AtomInvalid}, nil, nil}
 }
 
-func (self *Pars) NextToken(input io.Reader) (t Token, err error) {
+func (self *Pars) NextToken(input io.Reader) (Token, error) {
 	for {
 		if len(self.tokens) > 0 {
 			token := self.tokens[0]
@@ -442,7 +429,16 @@ func (self *Pars) NextToken(input io.Reader) (t Token, err error) {
 	}
 }
 
-func (self *Pars) ParseNextExpression(input io.Reader, parentToken Token) (e Expression, err error) {
+func (self Pars) NewUnexpectedTokenError(token Token) error {
+	return NewError(
+		self.Lex.Source.String(),
+		token.Offset,
+		fmt.Sprintf(
+			"Unexpected token %v",
+			TokensFormatter{self.Lex.Source.String(), []Token{token}}.String()))
+}
+
+func (self *Pars) ParseNextExpression(input io.Reader, parentToken Token) (Expression, error) {
 	if parentToken.Type == TokRparen {
 		// Safety measure
 		panic(fmt.Sprintf("Delegated unexpected %v", parentToken))
@@ -455,9 +451,10 @@ func (self *Pars) ParseNextExpression(input io.Reader, parentToken Token) (e Exp
 		}
 		token = localToken
 	}
-	if token.Type == TokIdentifier || token.Type == TokNumber || token.Type == TokString {
+	switch token.Type {
+	case TokIdentifier, TokNumber, TokString:
 		return NewAtomExpression(self.Lex, token), nil
-	} else if token.Type == TokLparen {
+	case TokLparen:
 		var rootExpression Expression
 		token, err := self.NextToken(input)
 		if err != nil {
@@ -470,39 +467,35 @@ func (self *Pars) ParseNextExpression(input io.Reader, parentToken Token) (e Exp
 			}
 			rootExpression.Left = &left
 			var lastExpression *Expression = &rootExpression
+		listParsing:
 			for {
 				var expression Expression
 				lastExpression.Right = &expression
 				token, err := self.NextToken(input)
 				if err != nil {
-					return NilExpression(), err
+					return rootExpression, err
 				}
 				if token.Type == TokDot {
 					right, err := self.ParseNextExpression(input, Token{0, 0, TokInvalid})
 					if err != nil {
-						return NilExpression(), err
+						return rootExpression, err
 					}
 					expression = right
 					token, err := self.NextToken(input)
 					if err != nil {
-						return NilExpression(), err
+						return rootExpression, err
 					}
 					if token.Type != TokRparen {
-						return NilExpression(), NewError(
-							self.Lex.Source.String(),
-							token.Offset,
-							fmt.Sprintf(
-								"Unexpected token %v, expected TokRparen<)>",
-								TokensFormatter{self.Lex.Source.String(), []Token{token}}.String()))
+						return rootExpression, self.NewUnexpectedTokenError(token)
 					}
-					break
+					break listParsing
 				} else {
 					if token.Type == TokRparen {
 						break
 					}
 					left, err := self.ParseNextExpression(input, token)
 					if err != nil {
-						return NilExpression(), err
+						return rootExpression, err
 					}
 					expression.Left = &left
 					lastExpression = &expression
@@ -510,41 +503,24 @@ func (self *Pars) ParseNextExpression(input io.Reader, parentToken Token) (e Exp
 			}
 		}
 		return rootExpression, nil
-	} else if token.Type == TokQuote {
+	case TokQuote:
+		quoted, err := self.ParseNextExpression(input, Token{0, 0, TokInvalid})
 		expression := Expression{
 			Atom{"", AtomInvalid},
 			&Expression{
 				Atom{"quote", AtomIdentifier},
-				&Expression{
-					Atom{"", AtomInvalid},
-					nil,
-					nil,
-				},
+				&Expression{Atom{"", AtomInvalid}, nil, nil},
 				nil,
 			},
-			nil,
+			&Expression{Atom{"", AtomInvalid}, &quoted, nil},
 		}
-		right, err := self.ParseNextExpression(input, Token{0, 0, TokInvalid})
-		if err != nil {
-			return NilExpression(), err
-		}
-		expression.Right = &Expression{
-			Atom{"", AtomInvalid},
-			&right,
-			nil,
-		}
-		return expression, nil
-	} else {
-		return NilExpression(), NewError(
-			self.Lex.Source.String(),
-			token.Offset,
-			fmt.Sprintf("Unsupported token %v", token))
+		return expression, err
 	}
+	return NilExpression(), self.NewUnexpectedTokenError(token)
 }
 
 func TestLex() {
 	var lex Lex
-	var tokensNum int
 	var tokens []Token
 	for {
 		var c []byte = []byte{0}
@@ -558,21 +534,26 @@ func TestLex() {
 			return
 		}
 		tokens = append(tokens, newTokens...)
-		if c[0] == '\n' && len(lex.Tokens) > tokensNum {
+		if c[0] == '\n' && len(tokens) > 0 {
 			fmt.Println(TokensFormatter{lex.Source.String(), tokens})
 			tokens = tokens[:0]
 		}
 	}
 }
 
-func main() {
+func TestPars() {
 	var parser Pars
 	for {
 		expression, err := parser.ParseNextExpression(os.Stdin, Token{0, 0, TokInvalid})
-		if err != nil {
-			fmt.Printf(err.Error())
-			return
+		if err == io.EOF {
+			break
+		} else if err != nil {
+			fmt.Printf("Error: %s\n", err.Error())
 		}
 		fmt.Printf("Expression: %v\n", expression)
 	}
+}
+
+func main() {
+	TestPars()
 }
