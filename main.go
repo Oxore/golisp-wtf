@@ -399,14 +399,22 @@ func AtomTypeFromToken(t TokenType) AtomType {
 	panic(fmt.Sprintf("Cannot convert TokenType %v to AtomType", t))
 }
 
-func NewAtomExpression(lex Lex, token Token) Expression {
+func AtomFromToken(lex Lex, token Token) Expression {
 	start, end := token.Offset, token.Offset+token.Length
 	atom := Atom{lex.Source.String()[start:end], AtomTypeFromToken(token.Type)}
 	return Expression{atom, nil, nil}
 }
 
-func NilExpression() Expression {
+func ExpressionNil() Expression {
 	return Expression{Atom{"", AtomInvalid}, nil, nil}
+}
+
+func NewNode(left, right *Expression) *Expression {
+	return &Expression{Atom{"", AtomInvalid}, left, right}
+}
+
+func NewAtom(repr string, t AtomType) *Expression {
+	return &Expression{Atom{repr, t}, nil, nil}
 }
 
 func (self *Pars) NextToken(input io.Reader) (Token, error) {
@@ -438,85 +446,80 @@ func (self Pars) NewUnexpectedTokenError(token Token) error {
 			TokensFormatter{self.Lex.Source.String(), []Token{token}}.String()))
 }
 
+func (self *Pars) ParseRemainingList(input io.Reader) (*Expression, error) {
+	var pseudoRoot Expression
+	var last *Expression = &pseudoRoot
+	for {
+		var expression Expression
+		last.Right = &expression
+		token, err := self.NextToken(input)
+		if err != nil {
+			return pseudoRoot.Right, err
+		}
+		if token.Type == TokDot {
+			// A pretty much determined sequence is expected here after we got the
+			// TokDot token type
+			right, err := self.ParseNextExpression(input, Token{0, 0, TokInvalid})
+			if err != nil {
+				return pseudoRoot.Right, err
+			}
+			expression = right
+			token, err := self.NextToken(input)
+			if err != nil {
+				return pseudoRoot.Right, err
+			}
+			if token.Type != TokRparen {
+				return pseudoRoot.Right, self.NewUnexpectedTokenError(token)
+			}
+			return pseudoRoot.Right, nil
+		}
+		if token.Type == TokRparen {
+			return pseudoRoot.Right, nil
+		}
+		left, err := self.ParseNextExpression(input, token)
+		if err != nil {
+			return pseudoRoot.Right, err
+		}
+		expression.Left = &left
+		last = &expression
+	}
+}
+
 func (self *Pars) ParseNextExpression(input io.Reader, parentToken Token) (Expression, error) {
 	if parentToken.Type == TokRparen {
 		// Safety measure
 		panic(fmt.Sprintf("Delegated unexpected %v", parentToken))
 	}
-	var token = parentToken
+	token := parentToken
 	if parentToken.Type == TokInvalid {
-		localToken, err := self.NextToken(input)
+		newToken, err := self.NextToken(input)
 		if err != nil {
-			return NilExpression(), err
+			return ExpressionNil(), err
 		}
-		token = localToken
+		token = newToken
 	}
 	switch token.Type {
 	case TokIdentifier, TokNumber, TokString:
-		return NewAtomExpression(self.Lex, token), nil
+		return AtomFromToken(self.Lex, token), nil
 	case TokLparen:
-		var rootExpression Expression
 		token, err := self.NextToken(input)
 		if err != nil {
-			return NilExpression(), err
+			return ExpressionNil(), err
 		}
-		if token.Type != TokRparen {
-			left, err := self.ParseNextExpression(input, token)
-			if err != nil {
-				return NilExpression(), err
-			}
-			rootExpression.Left = &left
-			var lastExpression *Expression = &rootExpression
-		listParsing:
-			for {
-				var expression Expression
-				lastExpression.Right = &expression
-				token, err := self.NextToken(input)
-				if err != nil {
-					return rootExpression, err
-				}
-				if token.Type == TokDot {
-					right, err := self.ParseNextExpression(input, Token{0, 0, TokInvalid})
-					if err != nil {
-						return rootExpression, err
-					}
-					expression = right
-					token, err := self.NextToken(input)
-					if err != nil {
-						return rootExpression, err
-					}
-					if token.Type != TokRparen {
-						return rootExpression, self.NewUnexpectedTokenError(token)
-					}
-					break listParsing
-				} else {
-					if token.Type == TokRparen {
-						break
-					}
-					left, err := self.ParseNextExpression(input, token)
-					if err != nil {
-						return rootExpression, err
-					}
-					expression.Left = &left
-					lastExpression = &expression
-				}
-			}
+		if token.Type == TokRparen {
+			return ExpressionNil(), nil
 		}
-		return rootExpression, nil
+		left, err := self.ParseNextExpression(input, token)
+		if err != nil {
+			return ExpressionNil(), err
+		}
+		right, err := self.ParseRemainingList(input)
+		return *NewNode(&left, right), err
 	case TokQuote:
 		quoted, err := self.ParseNextExpression(input, Token{0, 0, TokInvalid})
-		expression := Expression{
-			Atom{"", AtomInvalid},
-			&Expression{
-				Atom{"quote", AtomIdentifier},
-				&Expression{Atom{"", AtomInvalid}, nil, nil},
-				nil,
-			},
-			&Expression{Atom{"", AtomInvalid}, &quoted, nil},
-		}
-		return expression, err
+		return *NewNode(NewAtom("quote", AtomIdentifier), NewNode(&quoted, nil)), err
 	}
-	return NilExpression(), self.NewUnexpectedTokenError(token)
+	return ExpressionNil(), self.NewUnexpectedTokenError(token)
 }
 
 func TestLex() {
