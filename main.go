@@ -215,13 +215,6 @@ func (self *Lex) BeginString() []Token {
 	return newTokens
 }
 
-func (self *Lex) FinishBuiltin(t TokenType) []Token {
-	self.LastTokenMut().Length += 1
-	self.LastTokenMut().Type = t
-	self.state = LexIdle
-	return []Token{self.LastToken()}
-}
-
 func IsNumeric(c byte) bool {
 	return c >= '0' && c <= '9'
 }
