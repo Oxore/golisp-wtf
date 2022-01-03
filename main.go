@@ -459,7 +459,7 @@ func (self *Pars) ParseRemainingList(input io.Reader) (*Expression, error) {
 		if token.Type == TokDot {
 			// A pretty much determined sequence is expected here after we got the
 			// TokDot token type
-			right, err := self.ParseNextExpression(input, Token{0, 0, TokInvalid})
+			right, err := self.ParseNext(input)
 			if err != nil {
 				return pseudoRoot.Right, err
 			}
@@ -476,7 +476,7 @@ func (self *Pars) ParseRemainingList(input io.Reader) (*Expression, error) {
 		if token.Type == TokRparen {
 			return pseudoRoot.Right, nil
 		}
-		left, err := self.ParseNextExpression(input, token)
+		left, err := self.ParseNextWithToken(input, token)
 		if err != nil {
 			return pseudoRoot.Right, err
 		}
@@ -485,7 +485,7 @@ func (self *Pars) ParseRemainingList(input io.Reader) (*Expression, error) {
 	}
 }
 
-func (self *Pars) ParseNextExpression(input io.Reader, parentToken Token) (Expression, error) {
+func (self *Pars) ParseNextWithToken(input io.Reader, parentToken Token) (Expression, error) {
 	if parentToken.Type == TokRparen {
 		// Safety measure
 		panic(fmt.Sprintf("Delegated unexpected %v", parentToken))
@@ -509,17 +509,21 @@ func (self *Pars) ParseNextExpression(input io.Reader, parentToken Token) (Expre
 		if token.Type == TokRparen {
 			return ExpressionNil(), nil
 		}
-		left, err := self.ParseNextExpression(input, token)
+		left, err := self.ParseNextWithToken(input, token)
 		if err != nil {
 			return ExpressionNil(), err
 		}
 		right, err := self.ParseRemainingList(input)
 		return *NewNode(&left, right), err
 	case TokQuote:
-		quoted, err := self.ParseNextExpression(input, Token{0, 0, TokInvalid})
+		quoted, err := self.ParseNext(input)
 		return *NewNode(NewAtom("quote", AtomIdentifier), NewNode(&quoted, nil)), err
 	}
 	return ExpressionNil(), self.NewUnexpectedTokenError(token)
+}
+
+func (self *Pars) ParseNext(input io.Reader) (Expression, error) {
+	return self.ParseNextWithToken(input, Token{0, 0, TokInvalid})
 }
 
 func TestLex() {
@@ -547,7 +551,7 @@ func TestLex() {
 func TestPars() {
 	var parser Pars
 	for {
-		expression, err := parser.ParseNextExpression(os.Stdin, Token{0, 0, TokInvalid})
+		expression, err := parser.ParseNext(os.Stdin)
 		if err == io.EOF {
 			break
 		} else if err != nil {
