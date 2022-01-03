@@ -184,7 +184,7 @@ func (self *Lex) AddToken(t TokenType) []Token {
 	var newTokens []Token
 	if self.state != LexIdle {
 		self.state = LexIdle
-		newTokens = append(newTokens, self.Tokens[len(self.Tokens)-1])
+		newTokens = append(newTokens, self.LastToken())
 	}
 	newToken := Token{self.Source.Len(), 1, t}
 	newTokens = append(newTokens, newToken)
@@ -207,7 +207,7 @@ func (self *Lex) BeginIdentifier() {
 func (self *Lex) BeginString() []Token {
 	var newTokens []Token
 	if self.state != LexIdle {
-		newTokens = append(newTokens, self.Tokens[len(self.Tokens)-1])
+		newTokens = append(newTokens, self.LastToken())
 	}
 	newToken := Token{self.Source.Len(), 1, TokString}
 	self.Tokens = append(self.Tokens, newToken)
@@ -216,12 +216,10 @@ func (self *Lex) BeginString() []Token {
 }
 
 func (self *Lex) FinishBuiltin(t TokenType) []Token {
-	token := self.Tokens[len(self.Tokens)-1]
-	token.Length += 1
-	token.Type = t
-	self.Tokens[len(self.Tokens)-1] = token
+	self.LastTokenMut().Length += 1
+	self.LastTokenMut().Type = t
 	self.state = LexIdle
-	return []Token{token}
+	return []Token{self.LastToken()}
 }
 
 func IsNumeric(c byte) bool {
@@ -332,10 +330,8 @@ func (self *Lex) ConsumeImpl(c byte) ([]Token, error) {
 		} else if c == '"' {
 			self.BeginString()
 		} else if c == ' ' || c == 0x0A || c == 0x0D || c == '\t' {
-			if self.state != LexIdle {
-				self.state = LexIdle
-				return self.Tokens[len(self.Tokens)-1:], nil
-			}
+			self.state = LexIdle
+			return []Token{self.LastToken()}, nil
 		} else if IsAlphaNumeric(c) {
 			self.LastTokenMut().Length += 1
 		} else if c == ';' {
@@ -367,7 +363,7 @@ func (self *Lex) ConsumeImpl(c byte) ([]Token, error) {
 		if c == '"' {
 			self.LastTokenMut().Length += 1
 			self.state = LexIdle
-			return self.Tokens[len(self.Tokens)-1:], nil
+			return []Token{self.LastToken()}, nil
 		} else if c == '\\' {
 			self.LastTokenMut().Length += 1
 			self.state = LexStringEscaped
