@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 type TokenType int
@@ -95,20 +95,20 @@ const (
 )
 
 type Value struct {
-	Type ValueType
-	Bool bool
-	PairLeft *Value
-	PairRight *Value
-	Symbol string
-	Number int
-	Char byte
+	Type       ValueType
+	Bool       bool
+	PairLeft   *Value
+	PairRight  *Value
+	Symbol     string
+	Number     int
+	Char       byte
 	StringData string
-	Proc func(Value, Interp) (Value, error)
+	Proc       func(Value, Interp) (Value, error)
 }
 
 type Interp struct {
 	Source *strings.Builder
-	Table map[string] Value
+	Table  map[string]Value
 }
 
 func (e Error) Error() string {
@@ -604,7 +604,7 @@ func (self *Interp) EvalRight(expression Expression) (Value, error) {
 		}
 		value := Value{Type: ValPair}
 		if expression.Left != nil {
-			left, err:= self.Eval(*expression.Left)
+			left, err := self.Eval(*expression.Left)
 			if err != nil {
 				return *pseudoRoot.PairRight, err
 			}
@@ -618,7 +618,7 @@ func (self *Interp) EvalRight(expression Expression) (Value, error) {
 			return *pseudoRoot.PairRight, nil
 		}
 		if expression.Right.Atom.Type != AtomInvalid {
-			right, err:= self.Eval(*expression.Right)
+			right, err := self.Eval(*expression.Right)
 			value.PairRight = &right
 			return *pseudoRoot.PairRight, err
 		}
@@ -746,7 +746,7 @@ func TestEval() {
 	interpreter.Source = &parser.Lex.Source
 	interpreter.Table = map[string]Value{
 		"+": Value{Type: ValProc, Proc: plusFn},
-		}
+	}
 	for {
 		expression, err := parser.ParseNext(os.Stdin)
 		if err == io.EOF {
