@@ -671,13 +671,16 @@ func TestPars() {
 func TestEval() {
 	plusFn := func(arg Value, interp Interp) (Value, error) {
 		var acc int
+		var position int
 		for arg.Type != ValNull {
+			position += 1
 			if arg.Type != ValPair {
 				return Value{Type: ValNull}, NewError(
 					interp.Source.String(),
 					arg.Token.Offset,
 					fmt.Sprintf(
-						"Unexpected arg carrier type %v, expected ValPair",
+						"Wrong type argument in position %d (expecting ValPair): %v",
+						position,
 						arg.Type))
 			}
 			left := *arg.PairLeft
@@ -686,7 +689,8 @@ func TestEval() {
 					interp.Source.String(),
 					arg.Token.Offset,
 					fmt.Sprintf(
-						"Unexpected value type %v, expected ValNumber",
+						"Wrong type argument in position %d (expecting ValPair): %v",
+						position,
 						arg.Type))
 			}
 			acc += left.Number
@@ -697,11 +701,53 @@ func TestEval() {
 		}
 		return Value{Type: ValNumber, Number: acc}, nil
 	}
+	carFn := func(arg Value, interp Interp) (Value, error) {
+		if arg.Type != ValPair {
+			return Value{Type: ValNull}, NewError(
+				interp.Source.String(),
+				arg.Token.Offset,
+				fmt.Sprintf(
+					"Wrong type argument in position 1 (expecting ValPair): %v",
+					arg))
+		}
+		left := arg.PairLeft
+		if left.Type != ValPair {
+			return Value{Type: ValNull}, NewError(
+				interp.Source.String(),
+				arg.Token.Offset,
+				fmt.Sprintf(
+					"Wrong type argument in position 1 (expecting ValPair): %v",
+					left))
+		}
+		return *left.PairLeft, nil
+	}
+	cdrFn := func(arg Value, interp Interp) (Value, error) {
+		if arg.Type != ValPair {
+			return Value{Type: ValNull}, NewError(
+				interp.Source.String(),
+				arg.Token.Offset,
+				fmt.Sprintf(
+					"Wrong type argument in position 1 (expecting ValPair): %v",
+					arg))
+		}
+		left := arg.PairLeft
+		if left.Type != ValPair {
+			return Value{Type: ValNull}, NewError(
+				interp.Source.String(),
+				arg.Token.Offset,
+				fmt.Sprintf(
+					"Wrong type argument in position 1 (expecting ValPair): %v",
+					left))
+		}
+		return *left.PairRight, nil
+	}
 	var parser Pars
 	var interpreter Interp
 	interpreter.Source = &parser.Lex.Source
 	interpreter.Table = map[string]Value{
 		"+": Value{Type: ValProc, Proc: plusFn},
+		"car": Value{Type: ValProc, Proc: carFn},
+		"cdr": Value{Type: ValProc, Proc: cdrFn},
 	}
 	for {
 		expression, err := parser.Parse(os.Stdin, false)
