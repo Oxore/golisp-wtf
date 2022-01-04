@@ -25,7 +25,7 @@
      showgrid="true"
      inkscape:zoom="1.5518659"
      inkscape:cx="304.79438"
-     inkscape:cy="1417.3261"
+     inkscape:cy="1494.008"
      inkscape:window-width="1279"
      inkscape:window-height="1038"
      inkscape:window-x="1280"
@@ -375,6 +375,34 @@
          style="fill:context-stroke;fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
          id="path28370-3-3-3-3-2" />
     </marker>
+    <marker
+       style="overflow:visible"
+       id="DotM-7-6-0-0"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="DotM"
+       inkscape:isstock="true">
+      <path
+         transform="matrix(0.4,0,0,0.4,2.96,0.4)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="m -2.5,-1 c 0,2.76 -2.24,5 -5,5 -2.76,0 -5,-2.24 -5,-5 0,-2.76 2.24,-5 5,-5 2.76,0 5,2.24 5,5 z"
+         id="path28407-4-5-8-2" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow2Mend-4-6-8-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="Arrow2Mend"
+       inkscape:isstock="true">
+      <path
+         transform="scale(-0.6)"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         style="fill:context-stroke;fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         id="path28370-3-3-5-7" />
+    </marker>
   </defs>
   <g
      inkscape:label="Layer 1"
@@ -398,7 +426,7 @@
          id="tspan585"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.002965"
-         y="8.9107399">Expression</tspan></text>
+         y="8.9107399">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3"
@@ -417,11 +445,11 @@
          id="tspan585-7"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.3595324"
-         y="14.544333">AtomInvalid</tspan></text>
+         y="14.544333">ValNull</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5"
-       width="44.979168"
+       width="44.979"
        height="5.291667"
        x="5.2916656"
        y="15.874999"
@@ -512,7 +540,7 @@
          id="tspan585-9"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.0029626"
-         y="61.827404">Expression</tspan></text>
+         y="61.827404">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-7"
@@ -531,7 +559,7 @@
          id="tspan585-7-1"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.35953"
-         y="67.460991">AtomInvalid</tspan></text>
+         y="67.460991">ValPair</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-29"
@@ -552,7 +580,7 @@
          x="7.0029626"
          y="72.752663">Left</tspan></text>
     <rect
-       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:#ffaaaa;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-6-4"
        width="44.979168"
        height="5.291667"
@@ -567,7 +595,7 @@
        id="text587-6-3-2-78"><tspan
          sodipodi:role="line"
          id="tspan585-7-5-9-4"
-         style="font-size:3.52778px;stroke-width:0.264583"
+         style="font-size:3.52778px;fill:#000000;stroke-width:0.264583"
          x="7.0029626"
          y="77.7024">Right</tspan></text>
     <rect
@@ -586,7 +614,7 @@
        id="text13182-03"><tspan
          sodipodi:role="line"
          id="tspan13180-6"
-         style="stroke-width:0.264583"
+         style="fill:#000000;stroke-width:0.264583"
          x="37.176025"
          y="78.337326">nil</tspan></text>
     <rect
@@ -615,7 +643,7 @@
          id="tspan585-3"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.0029635"
-         y="35.369072">Expression</tspan></text>
+         y="35.369072">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-6"
@@ -634,7 +662,7 @@
          id="tspan585-7-6"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.3595309"
-         y="41.002666">AtomNumber&lt;2&gt;</tspan></text>
+         y="41.002666">ValNumber&lt;2&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2"
@@ -729,7 +757,7 @@
          id="tspan585-3-0"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.273792"
-         y="72.410744">Expression</tspan></text>
+         y="72.410744">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-6-6"
@@ -748,7 +776,7 @@
          id="tspan585-7-6-5"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.63036"
-         y="78.044342">AtomNumber&lt;2&gt;</tspan></text>
+         y="78.044342">ValNumber&lt;2&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2-5"
@@ -835,7 +863,7 @@
          id="tspan14309"
          style="stroke-width:0.264583"
          x="53.213764"
-         y="12.294634">() - Empty list or nil</tspan><tspan
+         y="12.294634">'() - Empty list or nil</tspan><tspan
          sodipodi:role="line"
          style="stroke-width:0.264583"
          x="53.213764"
@@ -845,7 +873,7 @@
          style="stroke-width:0.264583"
          x="53.213764"
          y="22.877958"
-         id="tspan50484">consideration, because its type is &quot;AtomInvalid&quot;</tspan></text>
+         id="tspan50484">consideration, because its type is &quot;ValPair&quot;</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
@@ -856,7 +884,7 @@
          id="tspan14309-2"
          style="stroke-width:0.264583"
          x="54.388134"
-         y="37.641579">2 - Atom `2`</tspan><tspan
+         y="37.641579">2 - Atom `'2`</tspan><tspan
          sodipodi:role="line"
          style="stroke-width:0.264583"
          x="54.388134"
@@ -866,7 +894,7 @@
          style="stroke-width:0.264583"
          x="54.388134"
          y="48.224903"
-         id="tspan37454">because its type is not &quot;AtomInvalid&quot;</tspan></text>
+         id="tspan37454">because its type is not &quot;ValPair&quot;</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
@@ -877,7 +905,7 @@
          id="tspan14309-2-4"
          style="letter-spacing:0.00473594px;stroke-width:0.264583"
          x="58.025764"
-         y="62.83075">(2) - List with a single atom or `(2 . ())`</tspan></text>
+         y="62.83075">Invalid internal representation</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#DotM);marker-end:url(#Arrow2Mend)"
        d="M 39.6875,71.437499 55.562499,68.791666"
@@ -900,7 +928,7 @@
          id="tspan585-9-8"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.0029664"
-         y="98.869072">Expression</tspan></text>
+         y="98.869072">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-7-6"
@@ -919,7 +947,7 @@
          id="tspan585-7-1-8"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.3595347"
-         y="104.50266">AtomInvalid</tspan></text>
+         y="104.50266">ValPair</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
@@ -930,7 +958,7 @@
          id="tspan585-7-1-8-8"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.630363"
-         y="141.20193">AtomInvalid</tspan></text>
+         y="141.20193">ValNull</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-29-4"
@@ -1003,7 +1031,7 @@
          id="tspan585-3-0-6"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.273796"
-         y="109.45242">Expression</tspan></text>
+         y="109.45242">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-6-6-4"
@@ -1022,7 +1050,7 @@
          id="tspan585-7-6-5-5"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.630363"
-         y="115.08601">AtomNumber&lt;2&gt;</tspan></text>
+         y="115.08601">ValNumber&lt;2&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2-5-0"
@@ -1117,7 +1145,7 @@
          id="tspan585-3-0-6-4"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.273796"
-         y="135.91075">Expression</tspan></text>
+         y="135.91075">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-6-6-4-9"
@@ -1212,7 +1240,7 @@
          id="tspan14309-2-4-6"
          style="stroke-width:0.264583"
          x="58.025768"
-         y="99.872421">(2) - List with a single atom or `(2 . ())`</tspan></text>
+         y="99.872421">(2) - List with a single atom or `'(2 . ())`</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#DotM-7);marker-end:url(#Arrow2Mend-4)"
        d="m 39.687504,108.47917 15.874999,-2.64583"
@@ -1227,225 +1255,225 @@
        id="rect33-2-0-2"
        width="44.979168"
        height="5.291667"
-       x="5.2916646"
-       y="222.24998"
+       x="5.2916665"
+       y="238.125"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="7.0029635"
-       y="225.86906"
+       x="7.0029655"
+       y="241.74408"
        id="text587-8-7-1"><tspan
          sodipodi:role="line"
          id="tspan585-9-8-5"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="7.0029635"
-         y="225.86906">Expression</tspan></text>
+         x="7.0029655"
+         y="241.74408">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-7-6-9"
        width="44.979168"
        height="5.291667"
-       x="5.2916627"
-       y="227.54164"
+       x="5.2916646"
+       y="243.41666"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="7.3595319"
-       y="231.50266"
+       x="7.3595338"
+       y="247.37766"
        id="text587-6-36-8-9"><tspan
          sodipodi:role="line"
          id="tspan585-7-1-8-1"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="7.3595319"
-         y="231.50266">AtomInvalid</tspan></text>
+         x="7.3595338"
+         y="247.37766">Valpair</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-29-4-10"
        width="44.979168"
        height="5.291667"
-       x="5.2916636"
-       y="232.83331"
+       x="5.2916656"
+       y="248.70831"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="7.0029635"
-       y="236.79431"
+       x="7.0029655"
+       y="252.66931"
        id="text587-6-3-3-3-7"><tspan
          sodipodi:role="line"
          id="tspan585-7-5-19-1-5"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="7.0029635"
-         y="236.79431">Left</tspan></text>
+         x="7.0029655"
+         y="252.66931">Left</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-6-4-4-87"
        width="44.979168"
        height="5.291667"
-       x="5.2916646"
-       y="238.12498"
+       x="5.2916665"
+       y="254"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="7.0029635"
-       y="241.74406"
+       x="7.0029655"
+       y="257.61908"
        id="text587-6-3-2-78-9-0"><tspan
          sodipodi:role="line"
          id="tspan585-7-5-9-4-2-4"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="7.0029635"
-         y="241.74406">Right</tspan></text>
+         x="7.0029655"
+         y="257.61908">Right</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-5-0-8"
        width="21.166666"
        height="5.2916665"
-       x="29.104162"
-       y="238.12498"
+       x="29.104164"
+       y="254"
        ry="1.589458e-07" />
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-1-1-9-04"
        width="21.166666"
        height="5.2916665"
-       x="29.104166"
-       y="232.83333"
+       x="29.104168"
+       y="248.70834"
        ry="1.589458e-07" />
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-0-3-2-2"
        width="44.979168"
        height="5.291667"
-       x="55.562496"
-       y="232.83333"
+       x="55.5625"
+       y="248.70834"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="57.273796"
-       y="236.45241"
+       x="57.2738"
+       y="252.32742"
        id="text587-9-2-6-96"><tspan
          sodipodi:role="line"
          id="tspan585-3-0-6-1"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="57.273796"
-         y="236.45241">Expression</tspan></text>
+         x="57.2738"
+         y="252.32742">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-6-6-4-0"
        width="44.979168"
        height="5.291667"
-       x="55.562492"
-       y="238.125"
+       x="55.562496"
+       y="254"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="57.630363"
-       y="242.086"
+       x="57.630367"
+       y="257.961"
        id="text587-6-0-1-9-42"><tspan
          sodipodi:role="line"
          id="tspan585-7-6-5-5-2"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="57.630363"
-         y="242.086">AtomNumber&lt;2&gt;</tspan></text>
+         x="57.630367"
+         y="257.961">ValNumber&lt;2&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2-5-0-2"
        width="44.979168"
        height="5.291667"
-       x="55.562496"
-       y="243.41666"
+       x="55.5625"
+       y="259.29166"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="57.273796"
-       y="247.37766"
+       x="57.2738"
+       y="263.25266"
        id="text587-6-3-6-4-4-0"><tspan
          sodipodi:role="line"
          id="tspan585-7-5-1-7-8-5"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="57.273796"
-         y="247.37766">Left</tspan></text>
+         x="57.2738"
+         y="263.25266">Left</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-6-8-6-7-5"
        width="44.979168"
        height="5.291667"
-       x="55.562496"
-       y="248.70833"
+       x="55.5625"
+       y="264.58334"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="57.273796"
-       y="252.32741"
+       x="57.2738"
+       y="268.20242"
        id="text587-6-3-2-7-5-1-2"><tspan
          sodipodi:role="line"
          id="tspan585-7-5-9-9-6-7-90"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="57.273796"
-         y="252.32741">Right</tspan></text>
+         x="57.2738"
+         y="268.20242">Right</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-2-9-2-2"
        width="21.166666"
        height="5.2916665"
        x="79.374985"
-       y="248.70833"
+       y="264.58334"
        ry="1.589458e-07" />
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
        x="87.446854"
-       y="252.96234"
+       y="268.83734"
        id="text13182-0-3-7-8"><tspan
          sodipodi:role="line"
          id="tspan13180-2-7-2-3"
          style="stroke-width:0.264583"
          x="87.446854"
-         y="252.96234">nil</tspan></text>
+         y="268.83734">nil</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-1-3-4-2-8"
        width="21.166666"
        height="5.2916665"
        x="79.374992"
-       y="243.41666"
+       y="259.29166"
        ry="1.589458e-07" />
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
        x="87.446854"
-       y="247.67067"
+       y="263.54568"
        id="text13182-2-7-5-6-0"><tspan
          sodipodi:role="line"
          id="tspan13180-7-5-2-1-4"
          style="stroke-width:0.264583"
          x="87.446854"
-         y="247.67067">nil</tspan></text>
+         y="263.54568">nil</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="58.025768"
-       y="226.87241"
+       x="58.025772"
+       y="242.74741"
        id="text14311-9-5-0-9"><tspan
          sodipodi:role="line"
          id="tspan14309-2-4-6-4"
          style="stroke-width:0.264583"
-         x="58.025768"
-         y="226.87241">(2 . &quot;12&quot;) - Improper list with two atoms</tspan></text>
+         x="58.025772"
+         y="242.74741">'(2 . &quot;12&quot;) - Improper list with two atoms</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#DotM-7-9);marker-end:url(#Arrow2Mend-4-60)"
-       d="m 39.687502,235.47916 15.874999,-2.64583"
+       d="m 39.687504,251.35418 15.874999,-2.64583"
        id="path28341-1-35" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#DotM-7-6-7);marker-end:url(#Arrow2Mend-4-6-1)"
-       d="m 39.687498,240.77082 15.875,18.52084"
+       d="m 39.6875,256.64584 15.875,18.52084"
        id="path28341-1-9-1"
        sodipodi:nodetypes="cc" />
     <rect
@@ -1466,7 +1494,7 @@
          id="tspan585-9-8-6"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.0029635"
-         y="162.36906">Expression</tspan></text>
+         y="162.36906">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-7-6-3"
@@ -1485,7 +1513,7 @@
          id="tspan585-7-1-8-5"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.3595319"
-         y="168.00266">AtomInvalid</tspan></text>
+         y="168.00266">ValPair</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
@@ -1496,7 +1524,7 @@
          id="tspan585-7-1-8-8-1"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.3595343"
-         y="194.11859">AtomInvalid</tspan></text>
+         y="194.11859">ValPair</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-29-4-1"
@@ -1569,7 +1597,7 @@
          id="tspan585-3-0-6-44"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.273792"
-         y="172.95241">Expression</tspan></text>
+         y="172.95241">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-6-6-4-4"
@@ -1588,7 +1616,7 @@
          id="tspan585-7-6-5-5-7"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.63036"
-         y="178.586">AtomNumber&lt;2&gt;</tspan></text>
+         y="178.586">ValNumber&lt;2&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2-5-0-6"
@@ -1683,7 +1711,7 @@
          id="tspan585-3-0-6-44-0"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.273792"
-         y="199.41074">Expression</tspan></text>
+         y="199.41074">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-6-6-4-4-4"
@@ -1702,7 +1730,7 @@
          id="tspan585-7-6-5-5-7-8"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="57.63036"
-         y="205.04433">AtomString&lt;&quot;12&quot;&gt;</tspan></text>
+         y="205.04433">ValString&lt;&quot;12&quot;&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2-5-0-6-8"
@@ -1784,320 +1812,320 @@
        id="rect33-0-3-2-3-8-7"
        width="44.979168"
        height="5.291667"
-       x="55.5625"
-       y="259.29166"
-       ry="1.5894572e-07" />
-    <text
-       xml:space="preserve"
-       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="57.2738"
-       y="262.91074"
-       id="text587-9-2-6-0-6-4"><tspan
-         sodipodi:role="line"
-         id="tspan585-3-0-6-44-0-3"
-         style="font-size:3.52778px;stroke-width:0.264583"
-         x="57.2738"
-         y="262.91074">Expression</tspan></text>
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect33-3-6-6-4-4-4-1"
-       width="44.979168"
-       height="5.291667"
-       x="55.562496"
-       y="264.58331"
-       ry="1.5894572e-07" />
-    <text
-       xml:space="preserve"
-       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="57.630367"
-       y="268.54431"
-       id="text587-6-0-1-9-4-8-4"><tspan
-         sodipodi:role="line"
-         id="tspan585-7-6-5-5-7-8-6"
-         style="font-size:3.52778px;stroke-width:0.264583"
-         x="57.630367"
-         y="268.54431">AtomString&lt;&quot;12&quot;&gt;</tspan></text>
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect33-3-5-2-5-0-6-8-9"
-       width="44.979168"
-       height="5.291667"
-       x="55.5625"
-       y="269.87497"
-       ry="1.5894572e-07" />
-    <text
-       xml:space="preserve"
-       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="57.2738"
-       y="273.83597"
-       id="text587-6-3-6-4-4-3-9-4"><tspan
-         sodipodi:role="line"
-         id="tspan585-7-5-1-7-8-1-7-2"
-         style="font-size:3.52778px;stroke-width:0.264583"
-         x="57.2738"
-         y="273.83597">Left</tspan></text>
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect33-3-5-6-8-6-7-7-7-2"
-       width="44.979168"
-       height="5.291667"
-       x="55.5625"
+       x="55.562504"
        y="275.16666"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="57.2738"
+       x="57.273804"
        y="278.78574"
+       id="text587-9-2-6-0-6-4"><tspan
+         sodipodi:role="line"
+         id="tspan585-3-0-6-44-0-3"
+         style="font-size:3.52778px;stroke-width:0.264583"
+         x="57.273804"
+         y="278.78574">Value</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect33-3-6-6-4-4-4-1"
+       width="44.979168"
+       height="5.291667"
+       x="55.5625"
+       y="280.45831"
+       ry="1.5894572e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="57.630371"
+       y="284.41931"
+       id="text587-6-0-1-9-4-8-4"><tspan
+         sodipodi:role="line"
+         id="tspan585-7-6-5-5-7-8-6"
+         style="font-size:3.52778px;stroke-width:0.264583"
+         x="57.630371"
+         y="284.41931">ValString&lt;&quot;12&quot;&gt;</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect33-3-5-2-5-0-6-8-9"
+       width="44.979168"
+       height="5.291667"
+       x="55.562504"
+       y="285.74997"
+       ry="1.5894572e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="57.273804"
+       y="289.71097"
+       id="text587-6-3-6-4-4-3-9-4"><tspan
+         sodipodi:role="line"
+         id="tspan585-7-5-1-7-8-1-7-2"
+         style="font-size:3.52778px;stroke-width:0.264583"
+         x="57.273804"
+         y="289.71097">Left</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect33-3-5-6-8-6-7-7-7-2"
+       width="44.979168"
+       height="5.291667"
+       x="55.562504"
+       y="291.04166"
+       ry="1.5894572e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="57.273804"
+       y="294.66074"
        id="text587-6-3-2-7-5-1-5-6-6"><tspan
          sodipodi:role="line"
          id="tspan585-7-5-9-9-6-7-9-4-4"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="57.2738"
-         y="278.78574">Right</tspan></text>
+         x="57.273804"
+         y="294.66074">Right</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-2-9-2-6-3-1"
        width="21.166666"
        height="5.2916665"
        x="79.375"
-       y="275.16666"
+       y="291.04166"
        ry="1.589458e-07" />
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
        x="87.446869"
-       y="279.42065"
+       y="295.29565"
        id="text13182-0-3-7-2-0-2"><tspan
          sodipodi:role="line"
          id="tspan13180-2-7-2-1-3-8"
          style="stroke-width:0.264583"
          x="87.446869"
-         y="279.42065">nil</tspan></text>
+         y="295.29565">nil</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-1-3-4-2-7-0-8"
        width="21.166666"
        height="5.2916665"
        x="79.375008"
-       y="269.87497"
+       y="285.74997"
        ry="1.589458e-07" />
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
        x="87.446869"
-       y="274.129"
+       y="290.004"
        id="text13182-2-7-5-6-8-9-9"><tspan
          sodipodi:role="line"
          id="tspan13180-7-5-2-1-5-2-2"
          style="stroke-width:0.264583"
          x="87.446869"
-         y="274.129">nil</tspan></text>
+         y="290.004">nil</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-2-0-2-3"
        width="44.979168"
        height="5.291667"
-       x="2.6458333"
-       y="285.75"
+       x="2.6458356"
+       y="301.625"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="4.3571315"
-       y="289.36908"
+       x="4.3571334"
+       y="305.24408"
        id="text587-8-7-1-3"><tspan
          sodipodi:role="line"
          id="tspan585-9-8-5-8"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="4.3571315"
-         y="289.36908">Expression</tspan></text>
+         x="4.3571334"
+         y="305.24408">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-7-6-9-0"
        width="44.979168"
        height="5.291667"
-       x="2.6458313"
-       y="291.04166"
+       x="2.6458337"
+       y="306.91666"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="4.7137008"
-       y="295.00269"
+       x="4.7137027"
+       y="310.87769"
        id="text587-6-36-8-9-4"><tspan
          sodipodi:role="line"
          id="tspan585-7-1-8-1-7"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="4.7137008"
-         y="295.00269">AtomInvalid</tspan></text>
+         x="4.7137027"
+         y="310.87769">ValPair</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-29-4-10-6"
        width="44.979168"
        height="5.291667"
-       x="2.6458313"
-       y="296.33334"
+       x="2.6458337"
+       y="312.20834"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="4.3571315"
-       y="300.29434"
+       x="4.3571334"
+       y="316.16934"
        id="text587-6-3-3-3-7-8"><tspan
          sodipodi:role="line"
          id="tspan585-7-5-19-1-5-9"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="4.3571315"
-         y="300.29434">Left</tspan></text>
+         x="4.3571334"
+         y="316.16934">Left</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-6-4-4-87-0"
        width="44.979168"
        height="5.291667"
-       x="2.6458333"
-       y="301.625"
+       x="2.6458356"
+       y="317.5"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="4.3571315"
-       y="305.24408"
+       x="4.3571334"
+       y="321.11908"
        id="text587-6-3-2-78-9-0-6"><tspan
          sodipodi:role="line"
          id="tspan585-7-5-9-4-2-4-8"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="4.3571315"
-         y="305.24408">Right</tspan></text>
+         x="4.3571334"
+         y="321.11908">Right</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-5-0-8-7"
        width="21.166666"
        height="5.2916665"
-       x="26.45833"
-       y="301.625"
+       x="26.458332"
+       y="317.5"
        ry="1.589458e-07" />
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-1-1-9-04-9"
        width="21.166666"
        height="5.2916665"
-       x="26.458334"
-       y="296.33334"
+       x="26.458336"
+       y="312.20834"
        ry="1.589458e-07" />
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-0-3-2-2-0"
        width="44.979168"
        height="5.291667"
-       x="52.916664"
-       y="296.33334"
-       ry="1.5894572e-07" />
-    <text
-       xml:space="preserve"
-       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="54.62796"
-       y="299.95242"
-       id="text587-9-2-6-96-3"><tspan
-         sodipodi:role="line"
-         id="tspan585-3-0-6-1-3"
-         style="font-size:3.52778px;stroke-width:0.264583"
-         x="54.62796"
-         y="299.95242">Expression</tspan></text>
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect33-3-5-2-5-0-2-2"
-       width="44.979168"
-       height="5.291667"
-       x="52.916664"
-       y="306.91669"
-       ry="1.5894572e-07" />
-    <text
-       xml:space="preserve"
-       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="54.62796"
-       y="310.87769"
-       id="text587-6-3-6-4-4-0-6"><tspan
-         sodipodi:role="line"
-         id="tspan585-7-5-1-7-8-5-5"
-         style="font-size:3.52778px;stroke-width:0.264583"
-         x="54.62796"
-         y="310.87769">Left</tspan></text>
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect33-3-5-6-8-6-7-5-2"
-       width="44.979168"
-       height="5.291667"
-       x="52.916664"
+       x="52.916668"
        y="312.20834"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="54.62796"
+       x="54.627964"
        y="315.82742"
+       id="text587-9-2-6-96-3"><tspan
+         sodipodi:role="line"
+         id="tspan585-3-0-6-1-3"
+         style="font-size:3.52778px;stroke-width:0.264583"
+         x="54.627964"
+         y="315.82742">Value</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect33-3-5-2-5-0-2-2"
+       width="44.979168"
+       height="5.291667"
+       x="52.916668"
+       y="322.79169"
+       ry="1.5894572e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="54.627964"
+       y="326.75269"
+       id="text587-6-3-6-4-4-0-6"><tspan
+         sodipodi:role="line"
+         id="tspan585-7-5-1-7-8-5-5"
+         style="font-size:3.52778px;stroke-width:0.264583"
+         x="54.627964"
+         y="326.75269">Left</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect33-3-5-6-8-6-7-5-2"
+       width="44.979168"
+       height="5.291667"
+       x="52.916668"
+       y="328.08334"
+       ry="1.5894572e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="54.627964"
+       y="331.70242"
        id="text587-6-3-2-7-5-1-2-6"><tspan
          sodipodi:role="line"
          id="tspan585-7-5-9-9-6-7-90-5"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="54.62796"
-         y="315.82742">Right</tspan></text>
+         x="54.627964"
+         y="331.70242">Right</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-2-9-2-2-8"
        width="21.166666"
        height="5.2916665"
        x="76.729149"
-       y="312.20834"
+       y="328.08334"
        ry="1.589458e-07" />
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
        x="84.801018"
-       y="316.46237"
+       y="332.33737"
        id="text13182-0-3-7-8-7"><tspan
          sodipodi:role="line"
          id="tspan13180-2-7-2-3-9"
          style="stroke-width:0.264583"
          x="84.801018"
-         y="316.46237">nil</tspan></text>
+         y="332.33737">nil</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-1-3-4-2-8-6"
        width="21.166666"
        height="5.2916665"
        x="76.729156"
-       y="306.91669"
+       y="322.79169"
        ry="1.589458e-07" />
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
        x="84.801018"
-       y="311.17068"
+       y="327.04568"
        id="text13182-2-7-5-6-0-0"><tspan
          sodipodi:role="line"
          id="tspan13180-7-5-2-1-4-4"
          style="stroke-width:0.264583"
          x="84.801018"
-         y="311.17068">nil</tspan></text>
+         y="327.04568">nil</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="55.379936"
-       y="290.37244"
+       x="55.37994"
+       y="306.24744"
        id="text14311-9-5-0-9-1"><tspan
          sodipodi:role="line"
          id="tspan14309-2-4-6-4-0"
          style="stroke-width:0.264583"
-         x="55.379936"
-         y="290.37244">(() . &quot;12&quot;) - Improper list with nil on the left</tspan></text>
+         x="55.37994"
+         y="306.24744">'(() . &quot;12&quot;) - Improper list with nil on the left</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#DotM-7-9-8);marker-end:url(#Arrow2Mend-4-60-8)"
-       d="m 37.04167,298.97918 15.874999,-2.64583"
+       d="m 37.041672,314.8542 15.874999,-2.64583"
        id="path28341-1-35-4" />
     <path
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#DotM-7-6-7-8);marker-end:url(#Arrow2Mend-4-6-1-8)"
-       d="m 37.041666,304.27083 15.875,18.52084"
+       d="m 37.041668,320.14585 15.875,18.52084"
        id="path28341-1-9-1-8"
        sodipodi:nodetypes="cc" />
     <rect
@@ -2105,115 +2133,115 @@
        id="rect33-0-3-2-3-8-7-7"
        width="44.979168"
        height="5.291667"
-       x="52.916664"
-       y="322.79169"
-       ry="1.5894572e-07" />
-    <text
-       xml:space="preserve"
-       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="54.627968"
-       y="326.41077"
-       id="text587-9-2-6-0-6-4-0"><tspan
-         sodipodi:role="line"
-         id="tspan585-3-0-6-44-0-3-8"
-         style="font-size:3.52778px;stroke-width:0.264583"
-         x="54.627968"
-         y="326.41077">Expression</tspan></text>
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect33-3-6-6-4-4-4-1-6"
-       width="44.979168"
-       height="5.291667"
-       x="52.916664"
-       y="328.08334"
-       ry="1.5894572e-07" />
-    <text
-       xml:space="preserve"
-       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="54.984535"
-       y="332.04434"
-       id="text587-6-0-1-9-4-8-4-2"><tspan
-         sodipodi:role="line"
-         id="tspan585-7-6-5-5-7-8-6-4"
-         style="font-size:3.52778px;stroke-width:0.264583"
-         x="54.984535"
-         y="332.04434">AtomString&lt;&quot;12&quot;&gt;</tspan></text>
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect33-3-5-2-5-0-6-8-9-7"
-       width="44.979168"
-       height="5.291667"
-       x="52.916664"
-       y="333.375"
-       ry="1.5894572e-07" />
-    <text
-       xml:space="preserve"
-       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="54.627968"
-       y="337.336"
-       id="text587-6-3-6-4-4-3-9-4-9"><tspan
-         sodipodi:role="line"
-         id="tspan585-7-5-1-7-8-1-7-2-3"
-         style="font-size:3.52778px;stroke-width:0.264583"
-         x="54.627968"
-         y="337.336">Left</tspan></text>
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect33-3-5-6-8-6-7-7-7-2-9"
-       width="44.979168"
-       height="5.291667"
-       x="52.916664"
+       x="52.916668"
        y="338.66669"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="54.627968"
+       x="54.627972"
        y="342.28577"
+       id="text587-9-2-6-0-6-4-0"><tspan
+         sodipodi:role="line"
+         id="tspan585-3-0-6-44-0-3-8"
+         style="font-size:3.52778px;stroke-width:0.264583"
+         x="54.627972"
+         y="342.28577">Value</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect33-3-6-6-4-4-4-1-6"
+       width="44.979168"
+       height="5.291667"
+       x="52.916668"
+       y="343.95834"
+       ry="1.5894572e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="54.984539"
+       y="347.91934"
+       id="text587-6-0-1-9-4-8-4-2"><tspan
+         sodipodi:role="line"
+         id="tspan585-7-6-5-5-7-8-6-4"
+         style="font-size:3.52778px;stroke-width:0.264583"
+         x="54.984539"
+         y="347.91934">ValString&lt;&quot;12&quot;&gt;</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect33-3-5-2-5-0-6-8-9-7"
+       width="44.979168"
+       height="5.291667"
+       x="52.916668"
+       y="349.25"
+       ry="1.5894572e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="54.627972"
+       y="353.211"
+       id="text587-6-3-6-4-4-3-9-4-9"><tspan
+         sodipodi:role="line"
+         id="tspan585-7-5-1-7-8-1-7-2-3"
+         style="font-size:3.52778px;stroke-width:0.264583"
+         x="54.627972"
+         y="353.211">Left</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect33-3-5-6-8-6-7-7-7-2-9"
+       width="44.979168"
+       height="5.291667"
+       x="52.916668"
+       y="354.54169"
+       ry="1.5894572e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="54.627972"
+       y="358.16077"
        id="text587-6-3-2-7-5-1-5-6-6-2"><tspan
          sodipodi:role="line"
          id="tspan585-7-5-9-9-6-7-9-4-4-8"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="54.627968"
-         y="342.28577">Right</tspan></text>
+         x="54.627972"
+         y="358.16077">Right</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-2-9-2-6-3-1-3"
        width="21.166666"
        height="5.2916665"
        x="76.729156"
-       y="338.66669"
+       y="354.54169"
        ry="1.589458e-07" />
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
        x="84.801033"
-       y="342.92068"
+       y="358.79568"
        id="text13182-0-3-7-2-0-2-0"><tspan
          sodipodi:role="line"
          id="tspan13180-2-7-2-1-3-8-1"
          style="stroke-width:0.264583"
          x="84.801033"
-         y="342.92068">nil</tspan></text>
+         y="358.79568">nil</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-1-3-4-2-7-0-8-7"
        width="21.166666"
        height="5.2916665"
        x="76.729172"
-       y="333.375"
+       y="349.25"
        ry="1.589458e-07" />
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
        x="84.801033"
-       y="337.62903"
+       y="353.50403"
        id="text13182-2-7-5-6-8-9-9-8"><tspan
          sodipodi:role="line"
          id="tspan13180-7-5-2-1-5-2-2-9"
          style="stroke-width:0.264583"
          x="84.801033"
-         y="337.62903">nil</tspan></text>
+         y="353.50403">nil</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-0-3-2-5-7"
@@ -2232,7 +2260,7 @@
          id="tspan585-3-0-6-4-1"
          style="font-size:3.52778px;stroke-width:0.264583"
          x="7.0029669"
-         y="188.82741">Expression</tspan></text>
+         y="188.82741">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-6-6-4-9-8"
@@ -2287,36 +2315,6 @@
        x="29.104166"
        y="201.08333"
        ry="1.589458e-07" />
-    <text
-       xml:space="preserve"
-       style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="37.176037"
-       y="205.33733"
-       id="text13182-0-3-7-7-3"><tspan
-         sodipodi:role="line"
-         id="tspan13180-2-7-2-7-1"
-         style="stroke-width:0.264583"
-         x="37.176037"
-         y="205.33733">nil</tspan></text>
-    <rect
-       style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
-       id="rect11484-2-9-2-9-8-5"
-       width="21.166666"
-       height="5.2916665"
-       x="26.458334"
-       y="359.83334"
-       ry="1.589458e-07" />
-    <text
-       xml:space="preserve"
-       style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="34.530201"
-       y="364.08734"
-       id="text13182-0-3-7-7-3-6"><tspan
-         sodipodi:role="line"
-         id="tspan13180-2-7-2-7-1-9"
-         style="stroke-width:0.264583"
-         x="34.530201"
-         y="364.08734">nil</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-1-3-4-2-6-8"
@@ -2335,7 +2333,7 @@
          id="tspan14309-2-4-6-3"
          style="stroke-width:0.264583"
          x="58.025764"
-         y="163.37241">(2 &quot;12&quot;) - List with two atoms or `(2 . (&quot;12&quot; . ()))`</tspan></text>
+         y="163.37241">(2 &quot;12&quot;) - List with two atoms or `'(2 . (&quot;12&quot; . ()))`</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#DotM-7-1);marker-end:url(#Arrow2Mend-4-9)"
        d="m 39.687502,171.97915 15.874999,-2.64583"
@@ -2349,123 +2347,128 @@
        d="M 39.687498,177.27081 5.2916673,185.20833"
        id="path28341-1-9-3"
        sodipodi:nodetypes="cc" />
+    <path
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#DotM-7-6-0-0);marker-end:url(#Arrow2Mend-4-6-8-3)"
+       d="M 39.6875,203.72917 5.2916693,211.66669"
+       id="path28341-1-9-3-5"
+       sodipodi:nodetypes="cc" />
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-7-6-9-0-1"
        width="44.979168"
        height="5.291667"
-       x="52.916668"
-       y="301.625"
+       x="52.916672"
+       y="317.5"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="54.984539"
-       y="305.58603"
+       x="54.984543"
+       y="321.46103"
        id="text587-6-36-8-9-4-5"><tspan
          sodipodi:role="line"
          id="tspan585-7-1-8-1-7-4"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="54.984539"
-         y="305.58603">AtomInvalid</tspan></text>
+         x="54.984543"
+         y="321.46103">ValNull</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-2-0-2-3-7"
        width="44.979168"
        height="5.291667"
-       x="2.6458328"
-       y="349.25"
+       x="2.6458352"
+       y="365.125"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="4.357131"
-       y="352.86908"
+       x="4.3571329"
+       y="368.74408"
        id="text587-8-7-1-3-0"><tspan
          sodipodi:role="line"
          id="tspan585-9-8-5-8-9"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="4.357131"
-         y="352.86908">Expression</tspan></text>
+         x="4.3571329"
+         y="368.74408">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-7-6-9-0-3"
        width="44.979168"
        height="5.291667"
-       x="2.6458309"
-       y="354.54166"
+       x="2.6458333"
+       y="370.41666"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="4.7137003"
-       y="358.50269"
+       x="4.7137022"
+       y="374.37769"
        id="text587-6-36-8-9-4-6"><tspan
          sodipodi:role="line"
          id="tspan585-7-1-8-1-7-0"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="4.7137003"
-         y="358.50269">AtomInvalid</tspan></text>
+         x="4.7137022"
+         y="374.37769">ValPair</tspan></text>
     <rect
-       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       style="fill:#ffaaaa;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-29-4-10-6-6"
        width="44.979168"
        height="5.291667"
-       x="2.6458309"
-       y="359.83334"
+       x="2.6458333"
+       y="375.70834"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="4.357131"
-       y="363.79434"
+       x="4.3571329"
+       y="379.66934"
        id="text587-6-3-3-3-7-8-2"><tspan
          sodipodi:role="line"
          id="tspan585-7-5-19-1-5-9-6"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="4.357131"
-         y="363.79434">Left</tspan></text>
+         x="4.3571329"
+         y="379.66934">Left</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-6-4-4-87-0-1"
        width="44.979168"
        height="5.291667"
-       x="2.6458328"
-       y="365.125"
+       x="2.6458352"
+       y="381"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="4.357131"
-       y="368.74408"
+       x="4.3571329"
+       y="384.61908"
        id="text587-6-3-2-78-9-0-6-8"><tspan
          sodipodi:role="line"
          id="tspan585-7-5-9-4-2-4-8-7"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="4.357131"
-         y="368.74408">Right</tspan></text>
+         x="4.3571329"
+         y="384.61908">Right</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-5-0-8-7-9"
        width="21.166666"
        height="5.2916665"
-       x="26.45833"
-       y="365.125"
+       x="26.458332"
+       y="381"
        ry="1.589458e-07" />
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="55.379936"
-       y="353.87244"
+       x="55.37994"
+       y="369.74744"
        id="text14311-9-5-0-9-1-9"><tspan
          sodipodi:role="line"
          id="tspan14309-2-4-6-4-0-3"
          style="stroke-width:0.264583"
-         x="55.379936"
-         y="353.87244">(() . &quot;12&quot;) - Improper list with nil on the left</tspan></text>
+         x="55.37994"
+         y="369.74744">Invalid internal representation</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#DotM-7-6-7-8-2);marker-end:url(#Arrow2Mend-4-6-1-8-1)"
-       d="m 37.041665,367.77083 15.875,18.52084"
+       d="m 37.041667,383.64585 15.875,-7.93752"
        id="path28341-1-9-1-8-9"
        sodipodi:nodetypes="cc" />
     <rect
@@ -2473,114 +2476,247 @@
        id="rect33-0-3-2-3-8-7-7-4"
        width="44.979168"
        height="5.291667"
-       x="52.916664"
-       y="386.29169"
+       x="52.916668"
+       y="375.70834"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="54.627968"
-       y="389.91077"
+       x="54.627972"
+       y="379.32742"
        id="text587-9-2-6-0-6-4-0-7"><tspan
          sodipodi:role="line"
          id="tspan585-3-0-6-44-0-3-8-8"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="54.627968"
-         y="389.91077">Expression</tspan></text>
+         x="54.627972"
+         y="379.32742">Value</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-6-6-4-4-4-1-6-4"
        width="44.979168"
        height="5.291667"
-       x="52.916664"
-       y="391.58334"
+       x="52.916668"
+       y="381"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="54.984535"
-       y="395.54434"
+       x="54.984539"
+       y="384.961"
        id="text587-6-0-1-9-4-8-4-2-5"><tspan
          sodipodi:role="line"
          id="tspan585-7-6-5-5-7-8-6-4-0"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="54.984535"
-         y="395.54434">AtomString&lt;&quot;12&quot;&gt;</tspan></text>
+         x="54.984539"
+         y="384.961">ValString&lt;&quot;12&quot;&gt;</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-2-5-0-6-8-9-7-3"
        width="44.979168"
        height="5.291667"
-       x="52.916664"
-       y="396.875"
+       x="52.916668"
+       y="386.29166"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="54.627968"
-       y="400.836"
+       x="54.627972"
+       y="390.25266"
        id="text587-6-3-6-4-4-3-9-4-9-6"><tspan
          sodipodi:role="line"
          id="tspan585-7-5-1-7-8-1-7-2-3-1"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="54.627968"
-         y="400.836">Left</tspan></text>
+         x="54.627972"
+         y="390.25266">Left</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect33-3-5-6-8-6-7-7-7-2-9-0"
        width="44.979168"
        height="5.291667"
-       x="52.916664"
-       y="402.16669"
+       x="52.916668"
+       y="391.58334"
        ry="1.5894572e-07" />
     <text
        xml:space="preserve"
        style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
-       x="54.627968"
-       y="405.78577"
+       x="54.627972"
+       y="395.20242"
        id="text587-6-3-2-7-5-1-5-6-6-2-6"><tspan
          sodipodi:role="line"
          id="tspan585-7-5-9-9-6-7-9-4-4-8-3"
          style="font-size:3.52778px;stroke-width:0.264583"
-         x="54.627968"
-         y="405.78577">Right</tspan></text>
+         x="54.627972"
+         y="395.20242">Right</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-2-9-2-6-3-1-3-2"
        width="21.166666"
        height="5.2916665"
        x="76.729156"
-       y="402.16669"
+       y="391.58334"
        ry="1.589458e-07" />
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
        x="84.801033"
-       y="406.42068"
+       y="395.83734"
        id="text13182-0-3-7-2-0-2-0-0"><tspan
          sodipodi:role="line"
          id="tspan13180-2-7-2-1-3-8-1-6"
          style="stroke-width:0.264583"
          x="84.801033"
-         y="406.42068">nil</tspan></text>
+         y="395.83734">nil</tspan></text>
     <rect
        style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
        id="rect11484-1-3-4-2-7-0-8-7-1"
        width="21.166666"
        height="5.2916665"
        x="76.729172"
-       y="396.875"
+       y="386.29166"
        ry="1.589458e-07" />
     <text
        xml:space="preserve"
        style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
        x="84.801033"
-       y="401.12903"
+       y="390.54568"
        id="text13182-2-7-5-6-8-9-9-8-5"><tspan
          sodipodi:role="line"
          id="tspan13180-7-5-2-1-5-2-2-9-5"
          style="stroke-width:0.264583"
          x="84.801033"
-         y="401.12903">nil</tspan></text>
+         y="390.54568">nil</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect33-36"
+       width="44.979168"
+       height="5.291667"
+       x="5.2916646"
+       y="211.66667"
+       ry="1.5894572e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="7.0029626"
+       y="215.28574"
+       id="text587-7"><tspan
+         sodipodi:role="line"
+         id="tspan585-5"
+         style="font-size:3.52778px;stroke-width:0.264583"
+         x="7.0029626"
+         y="215.28574">Value</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect33-3-3"
+       width="44.979168"
+       height="5.291667"
+       x="5.2916627"
+       y="216.95833"
+       ry="1.5894572e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="7.35953"
+       y="220.91934"
+       id="text587-6-5"><tspan
+         sodipodi:role="line"
+         id="tspan585-7-62"
+         style="font-size:3.52778px;stroke-width:0.264583"
+         x="7.35953"
+         y="220.91934">ValNull</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect33-3-5-9"
+       width="44.979"
+       height="5.291667"
+       x="5.2916627"
+       y="222.25"
+       ry="1.5894572e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="7.0029626"
+       y="226.211"
+       id="text587-6-3-1"><tspan
+         sodipodi:role="line"
+         id="tspan585-7-5-2"
+         style="font-size:3.52778px;stroke-width:0.264583"
+         x="7.0029626"
+         y="226.211">Left</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.5;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect33-3-5-6-7"
+       width="44.979168"
+       height="5.291667"
+       x="5.2916646"
+       y="227.54167"
+       ry="1.5894572e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:3.52778px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="7.0029626"
+       y="231.16074"
+       id="text587-6-3-2-0"><tspan
+         sodipodi:role="line"
+         id="tspan585-7-5-9-93"
+         style="font-size:3.52778px;stroke-width:0.264583"
+         x="7.0029626"
+         y="231.16074">Right</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect11484-6"
+       width="21.166666"
+       height="5.2916665"
+       x="29.104162"
+       y="227.54167"
+       ry="1.589458e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="37.176025"
+       y="231.79567"
+       id="text13182-06"><tspan
+         sodipodi:role="line"
+         id="tspan13180-26"
+         style="stroke-width:0.264583"
+         x="37.176025"
+         y="231.79567">nil</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect11484-1-18"
+       width="21.166666"
+       height="5.2916665"
+       x="29.104166"
+       y="222.25"
+       ry="1.589458e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="37.176025"
+       y="226.504"
+       id="text13182-2-79"><tspan
+         sodipodi:role="line"
+         id="tspan13180-7-2"
+         style="stroke-width:0.264583"
+         x="37.176025"
+         y="226.504">nil</tspan></text>
+    <rect
+       style="fill:none;stroke:#000000;stroke-width:0.499999;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none"
+       id="rect11484-2-9-2-9-8-5"
+       width="21.166666"
+       height="5.2916665"
+       x="26.458336"
+       y="375.70834"
+       ry="1.589458e-07" />
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;stroke-width:0.264583"
+       x="34.530205"
+       y="379.96234"
+       id="text13182-0-3-7-7-3-6"><tspan
+         sodipodi:role="line"
+         id="tspan13180-2-7-2-7-1-9"
+         style="stroke-width:0.264583"
+         x="34.530205"
+         y="379.96234">nil</tspan></text>
   </g>
 </svg>

@@ -49,27 +49,6 @@ type Lex struct {
 	state  LexState
 }
 
-type AtomType int
-
-const (
-	AtomInvalid AtomType = iota
-	AtomNumber
-	AtomIdentifier
-	AtomString
-)
-
-type Atom struct {
-	Representation string
-	Offset         int
-	Type           AtomType
-}
-
-type Expression struct {
-	Atom  Atom
-	Left  *Expression
-	Right *Expression
-}
-
 type Pars struct {
 	Lex    Lex
 	tokens []Token
@@ -96,6 +75,7 @@ const (
 
 type Value struct {
 	Type       ValueType
+	Token      Token
 	Bool       bool
 	PairLeft   *Value
 	PairRight  *Value
@@ -220,40 +200,6 @@ func (tfmt TokensFormatter) String() string {
 
 func (lex Lex) String() string {
 	return TokensFormatter{lex.Source.String(), lex.Tokens}.String()
-}
-
-func (atom Atom) String() string {
-	switch atom.Type {
-	case AtomInvalid:
-		return fmt.Sprintf("AtomInvalid<%v>", atom.Representation)
-	case AtomNumber, AtomIdentifier, AtomString:
-		return fmt.Sprintf("%v", atom.Representation)
-	}
-	panic(fmt.Sprintf("Unknown atom type %v", atom.Type))
-}
-
-func (expression Expression) String() string {
-	var sb strings.Builder
-	if expression.Atom.Type != AtomInvalid {
-		sb.WriteString(expression.Atom.String())
-	} else {
-		sb.WriteString("(")
-		if expression.Left != nil || expression.Right != nil {
-			if expression.Left == nil {
-				sb.WriteString("()")
-			} else {
-				sb.WriteString(expression.Left.String())
-			}
-			sb.WriteString(" . ")
-			if expression.Right == nil {
-				sb.WriteString("()")
-			} else {
-				sb.WriteString(expression.Right.String())
-			}
-		}
-		sb.WriteString(")")
-	}
-	return sb.String()
 }
 
 func (self *Lex) AddToken(t TokenType) []Token {
@@ -452,34 +398,40 @@ func (self *Lex) Consume(c byte) ([]Token, error) {
 	return newTokens, err
 }
 
-func AtomTypeFromToken(t TokenType) AtomType {
-	switch t {
-	case TokNumber:
-		return AtomNumber
-	case TokIdentifier:
-		return AtomIdentifier
-	case TokString:
-		return AtomString
-	}
-	panic(fmt.Sprintf("Cannot convert TokenType %v to AtomType", t))
-}
-
-func AtomFromToken(lex Lex, token Token) Expression {
+func ValueFromToken(lex Lex, token Token) (Value, error) {
 	start, end := token.Offset, token.Offset+token.Length
-	atom := Atom{lex.Source.String()[start:end], token.Offset, AtomTypeFromToken(token.Type)}
-	return Expression{atom, nil, nil}
+	repr := lex.Source.String()[start:end]
+	tokenFormatted := TokensFormatter{lex.Source.String(), []Token{token}}.String()
+	switch token.Type {
+	case TokNumber:
+		number, err := strconv.Atoi(repr)
+		if err != nil {
+			return Value{Type: ValNull}, NewError(
+				lex.Source.String(),
+				token.Offset,
+				fmt.Sprintf("Can't parse number %v", tokenFormatted))
+		}
+		return Value{Type: ValNumber, Number: number, Token: token}, nil
+	case TokIdentifier:
+		if "#f" == repr {
+			return Value{Type: ValBool, Bool: false, Token: token}, nil
+		}
+		if "#t" == repr {
+			return Value{Type: ValBool, Bool: true, Token: token}, nil
+		}
+		return Value{Type: ValSymbol, Symbol: repr, Token: token}, nil
+	case TokString:
+		return Value{Type: ValString, StringData: repr, Token: token}, nil
+	}
+	panic(fmt.Sprintf("Cannot convert %v to Value", tokenFormatted))
 }
 
-func ExpressionNil() Expression {
-	return Expression{Atom{}, nil, nil}
+func ValueNull() Value {
+	return Value{Type: ValNull}
 }
 
-func NewNode(left, right *Expression) *Expression {
-	return &Expression{Atom{}, left, right}
-}
-
-func NewAtom(repr string, offset int, t AtomType) *Expression {
-	return &Expression{Atom{repr, offset, t}, nil, nil}
+func NewNode(left, right *Value) *Value {
+	return &Value{Type: ValPair, PairLeft: left, PairRight: right}
 }
 
 func (self *Pars) NextToken(input io.Reader) (Token, error) {
@@ -511,46 +463,47 @@ func (self Pars) NewUnexpectedTokenError(token Token) error {
 			TokensFormatter{self.Lex.Source.String(), []Token{token}}.String()))
 }
 
-func (self *Pars) ParseRemainingList(input io.Reader) (*Expression, error) {
-	var pseudoRoot Expression
-	var last *Expression = &pseudoRoot
+func (self *Pars) ParseRemainingList(input io.Reader) (*Value, error) {
+	pseudoRoot := Value{Type: ValPair, PairRight: &Value{Type: ValNull}}
+	last := &pseudoRoot
 	for {
-		var expression Expression
-		last.Right = &expression
+		expression := Value{Type:ValPair}
+		last.PairRight = &expression
 		token, err := self.NextToken(input)
 		if err != nil {
-			return pseudoRoot.Right, err
+			return pseudoRoot.PairRight, err
 		}
 		if token.Type == TokDot {
 			// A pretty much determined sequence is expected here after we got the
 			// TokDot token type
 			right, err := self.ParseNext(input)
 			if err != nil {
-				return pseudoRoot.Right, err
+				return pseudoRoot.PairRight, err
 			}
 			expression = right
 			token, err := self.NextToken(input)
 			if err != nil {
-				return pseudoRoot.Right, err
+				return pseudoRoot.PairRight, err
 			}
 			if token.Type != TokRparen {
-				return pseudoRoot.Right, self.NewUnexpectedTokenError(token)
+				return pseudoRoot.PairRight, self.NewUnexpectedTokenError(token)
 			}
-			return pseudoRoot.Right, nil
+			return pseudoRoot.PairRight, nil
 		}
 		if token.Type == TokRparen {
-			return pseudoRoot.Right, nil
+			expression = Value{Type: ValNull}
+			return pseudoRoot.PairRight, nil
 		}
 		left, err := self.ParseNextWithToken(input, token)
 		if err != nil {
-			return pseudoRoot.Right, err
+			return pseudoRoot.PairRight, err
 		}
-		expression.Left = &left
+		expression.PairLeft = &left
 		last = &expression
 	}
 }
 
-func (self *Pars) ParseNextWithToken(input io.Reader, parentToken Token) (Expression, error) {
+func (self *Pars) ParseNextWithToken(input io.Reader, parentToken Token) (Value, error) {
 	if parentToken.Type == TokRparen {
 		// Safety measure
 		panic(fmt.Sprintf("Delegated unexpected %v", parentToken))
@@ -559,116 +512,96 @@ func (self *Pars) ParseNextWithToken(input io.Reader, parentToken Token) (Expres
 	if parentToken.Type == TokInvalid {
 		newToken, err := self.NextToken(input)
 		if err != nil {
-			return ExpressionNil(), err
+			return ValueNull(), err
 		}
 		token = newToken
 	}
 	switch token.Type {
 	case TokIdentifier, TokNumber, TokString:
-		return AtomFromToken(self.Lex, token), nil
+		return ValueFromToken(self.Lex, token)
 	case TokLparen:
-		token, err := self.NextToken(input)
+		token2, err := self.NextToken(input)
 		if err != nil {
-			return ExpressionNil(), err
+			return ValueNull(), err
 		}
-		if token.Type == TokRparen {
-			return ExpressionNil(), nil
+		if token2.Type == TokRparen {
+			return Value{Type: ValNull, Token: token}, nil
 		}
-		left, err := self.ParseNextWithToken(input, token)
+		left, err := self.ParseNextWithToken(input, token2)
 		if err != nil {
-			return ExpressionNil(), err
+			return ValueNull(), err
 		}
 		right, err := self.ParseRemainingList(input)
 		return *NewNode(&left, right), err
 	case TokQuote:
 		quoted, err := self.ParseNext(input)
-		return *NewNode(NewAtom("quote", token.Offset, AtomIdentifier), NewNode(&quoted, nil)), err
+		return *NewNode(
+			&Value{Type: ValSymbol, Symbol: "quote", Token: token},
+			NewNode(&quoted, &Value{Type: ValNull})), err
 	}
-	return ExpressionNil(), self.NewUnexpectedTokenError(token)
+	return ValueNull(), self.NewUnexpectedTokenError(token)
 }
 
-func (self *Pars) ParseNext(input io.Reader) (Expression, error) {
+func (self *Pars) ParseNext(input io.Reader) (Value, error) {
 	return self.ParseNextWithToken(input, Token{0, 0, TokInvalid})
 }
 
-func IsNilExpression(e Expression) bool {
-	return e.Atom.Type == AtomInvalid && e.Right == nil && e.Left == nil
-}
-
-func (self *Interp) EvalRight(expression Expression) (Value, error) {
+func (self *Interp) EvalRight(expression Value) (Value, error) {
 	pseudoRoot := Value{Type: ValPair, PairRight: &Value{Type: ValNull}}
 	lastPair := &pseudoRoot
 	for {
 		if lastPair.Type != ValPair {
 			panic("Not ValPair when it has to be")
 		}
-		value := Value{Type: ValPair}
-		if expression.Left != nil {
-			left, err := self.Eval(*expression.Left)
+		if expression.Type != ValPair {
+			right, err := self.Eval(expression)
 			if err != nil {
 				return *pseudoRoot.PairRight, err
 			}
-			value.PairLeft = &left
-		}
-		lastPair.PairRight = &value
-		if expression.Right == nil {
+			lastPair.PairRight = &right
 			return *pseudoRoot.PairRight, nil
 		}
-		if IsNilExpression(*expression.Right) {
-			return *pseudoRoot.PairRight, nil
-		}
-		if expression.Right.Atom.Type != AtomInvalid {
-			right, err := self.Eval(*expression.Right)
-			value.PairRight = &right
+		left, err := self.Eval(*expression.PairLeft)
+		if err != nil {
 			return *pseudoRoot.PairRight, err
 		}
+		value := Value{Type: ValPair}
+		value.PairLeft = &left
+		lastPair.PairRight = &value
 		lastPair = &value
-		expression = *expression.Right
+		expression = *expression.PairRight
 	}
 }
 
-func (self *Interp) Eval(expression Expression) (Value, error) {
-	switch expression.Atom.Type {
-	case AtomIdentifier:
-		if "#f" == expression.Atom.Representation {
-			return Value{Type: ValBool, Bool: false}, nil
-		}
-		if "#t" == expression.Atom.Representation {
-			return Value{Type: ValBool, Bool: true}, nil
-		}
-		value, ok := self.Table[expression.Atom.Representation]
+func (self *Interp) Eval(expression Value) (Value, error) {
+	switch expression.Type {
+	case ValSymbol:
+		value, ok := self.Table[expression.Symbol]
 		if ok == false {
 			return Value{Type: ValNull}, NewError(
 				self.Source.String(),
-				expression.Atom.Offset,
-				fmt.Sprintf("Unbound variable \"%v\"", expression.Atom.Representation))
+				expression.Token.Offset,
+				fmt.Sprintf("Unbound variable: \"%v\"", expression.Symbol))
 		}
 		return value, nil
-	case AtomNumber:
-		number, err := strconv.Atoi(expression.Atom.Representation)
-		if err != nil {
-			return Value{Type: ValNull}, NewError(
-				self.Source.String(),
-				expression.Atom.Offset,
-				fmt.Sprintf("Can't parse number %v", expression.Atom.Representation))
-		}
-		return Value{Type: ValNumber, Number: number}, nil
-	case AtomString:
-		return Value{Type: ValString, StringData: expression.Atom.Representation}, nil
-	case AtomInvalid:
-		left, err := self.Eval(*expression.Left)
+	case ValPair:
+		left, err := self.Eval(*expression.PairLeft)
 		if err != nil {
 			return Value{Type: ValNull}, err
 		}
-		if left.Type == ValProc {
-			right, err := self.EvalRight(*expression.Right)
-			if err != nil {
-				return Value{Type: ValNull}, err
-			}
-			return left.Proc(right, *self)
+		if left.Type != ValProc {
+			return Value{Type: ValNull}, NewError(
+				self.Source.String(),
+				expression.Token.Offset,
+				fmt.Sprintf("Wrong type to apply: %v", TokensFormatter{self.Source.String(), []Token{expression.Token}}))
 		}
+		right, err := self.EvalRight(*expression.PairRight)
+		if err != nil {
+			return Value{Type: ValNull}, err
+		}
+		return left.Proc(right, *self)
 	}
-	panic(fmt.Sprintf("Unimplemented atom type evaluation %v", expression.Atom))
+	return expression, nil
 }
 
 func TestLex() {
@@ -702,33 +635,27 @@ func TestPars() {
 		} else if err != nil {
 			fmt.Printf("Error: %s\n", err.Error())
 		}
-		fmt.Printf("Expression: %v\n", expression)
+		fmt.Printf("Value: %v\n", expression)
 	}
 }
 
 func TestEval() {
 	plusFn := func(arg Value, interp Interp) (Value, error) {
 		var acc int
-		for {
+		for arg.Type != ValNull {
 			if arg.Type != ValPair {
 				return Value{Type: ValNull}, NewError(
 					interp.Source.String(),
-					0, // TODO pass offset
+					arg.Token.Offset,
 					fmt.Sprintf(
 						"Unexpected arg carrier type %v, expected ValPair",
 						arg.Type))
-			}
-			if arg.PairLeft == nil {
-				return Value{Type: ValNull}, NewError(
-					interp.Source.String(),
-					0, // TODO pass offset
-					fmt.Sprintf("Unexpected value type ValNull, expected ValPair"))
 			}
 			left := *arg.PairLeft
 			if left.Type != ValNumber {
 				return Value{Type: ValNull}, NewError(
 					interp.Source.String(),
-					0, // TODO pass offset
+					arg.Token.Offset,
 					fmt.Sprintf(
 						"Unexpected value type %v, expected ValNumber",
 						arg.Type))
