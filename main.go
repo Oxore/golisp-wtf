@@ -593,7 +593,7 @@ func (self *Interp) Eval(expression Value) (Value, error) {
 			return Value{Type: ValNull}, NewError(
 				self.Source.String(),
 				expression.Token.Offset,
-				fmt.Sprintf("Wrong type to apply: %v", TokensFormatter{self.Source.String(), []Token{expression.Token}}))
+				fmt.Sprintf("Wrong type to apply: %v", expression))
 		}
 		right, err := self.EvalRight(*expression.PairRight)
 		if err != nil {
@@ -668,11 +668,15 @@ func TestEval() {
 		}
 		return Value{Type: ValNumber, Number: acc}, nil
 	}
+	quoteFn := func(arg Value, interp Interp) (Value, error) {
+		return arg, nil
+	}
 	var parser Pars
 	var interpreter Interp
 	interpreter.Source = &parser.Lex.Source
 	interpreter.Table = map[string]Value{
 		"+": Value{Type: ValProc, Proc: plusFn},
+		"quote": Value{Type: ValProc, Proc: quoteFn},
 	}
 	for {
 		expression, err := parser.ParseNext(os.Stdin)
