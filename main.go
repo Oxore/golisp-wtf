@@ -463,7 +463,7 @@ func (self Pars) NewUnexpectedTokenError(token Token) error {
 			TokensFormatter{self.Lex.Source.String(), []Token{token}}.String()))
 }
 
-func (self *Pars) ParseRemainingList(input io.Reader) (*Value, error) {
+func (self *Pars) ParseRemainingList(input io.Reader, quotedMode bool) (*Value, error) {
 	pseudoRoot := Value{Type: ValPair, PairRight: &Value{Type: ValNull}}
 	last := &pseudoRoot
 	for {
@@ -474,9 +474,13 @@ func (self *Pars) ParseRemainingList(input io.Reader) (*Value, error) {
 			return pseudoRoot.PairRight, err
 		}
 		if token.Type == TokDot {
+			if quotedMode == false {
+				// Dots permitted in quoted mode only
+				return pseudoRoot.PairRight, self.NewUnexpectedTokenError(token)
+			}
 			// A pretty much determined sequence is expected here after we got the
 			// TokDot token type
-			right, err := self.ParseNext(input)
+			right, err := self.Parse(input, quotedMode)
 			if err != nil {
 				return pseudoRoot.PairRight, err
 			}
@@ -494,7 +498,7 @@ func (self *Pars) ParseRemainingList(input io.Reader) (*Value, error) {
 			expression = Value{Type: ValNull}
 			return pseudoRoot.PairRight, nil
 		}
-		left, err := self.ParseNextWithToken(input, token)
+		left, err := self.ParseWithToken(input, token, quotedMode)
 		if err != nil {
 			return pseudoRoot.PairRight, err
 		}
@@ -503,7 +507,7 @@ func (self *Pars) ParseRemainingList(input io.Reader) (*Value, error) {
 	}
 }
 
-func (self *Pars) ParseNextWithToken(input io.Reader, parentToken Token) (Value, error) {
+func (self *Pars) ParseWithToken(input io.Reader, parentToken Token, quotedMode bool) (Value, error) {
 	if parentToken.Type == TokRparen {
 		// Safety measure
 		panic(fmt.Sprintf("Delegated unexpected %v", parentToken))
@@ -525,16 +529,35 @@ func (self *Pars) ParseNextWithToken(input io.Reader, parentToken Token) (Value,
 			return ValueNull(), err
 		}
 		if token2.Type == TokRparen {
-			return Value{Type: ValNull, Token: token}, nil
+			if quotedMode {
+				return Value{Type: ValNull, Token: token}, nil
+			}
+			return ValueNull(), self.NewUnexpectedTokenError(token2)
 		}
-		left, err := self.ParseNextWithToken(input, token2)
+		left, err := self.ParseWithToken(input, token2, quotedMode)
 		if err != nil {
 			return ValueNull(), err
 		}
-		right, err := self.ParseRemainingList(input)
+		if left.Type == ValSymbol && left.Symbol == "quote" {
+			quoted, err := self.Parse(input, true)
+			if err != nil {
+				return ValueNull(), err
+			}
+			token3, err := self.NextToken(input)
+			if err != nil {
+				return ValueNull(), err
+			}
+			if token3.Type == TokRparen {
+				return *NewNode(
+					&left,
+					NewNode(&quoted, &Value{Type: ValNull})), err
+			}
+			return ValueNull(), self.NewUnexpectedTokenError(token3)
+		}
+		right, err := self.ParseRemainingList(input, quotedMode)
 		return *NewNode(&left, right), err
 	case TokQuote:
-		quoted, err := self.ParseNext(input)
+		quoted, err := self.Parse(input, true)
 		return *NewNode(
 			&Value{Type: ValSymbol, Symbol: "quote", Token: token},
 			NewNode(&quoted, &Value{Type: ValNull})), err
@@ -542,8 +565,8 @@ func (self *Pars) ParseNextWithToken(input io.Reader, parentToken Token) (Value,
 	return ValueNull(), self.NewUnexpectedTokenError(token)
 }
 
-func (self *Pars) ParseNext(input io.Reader) (Value, error) {
-	return self.ParseNextWithToken(input, Token{0, 0, TokInvalid})
+func (self *Pars) Parse(input io.Reader, quoted bool) (Value, error) {
+	return self.ParseWithToken(input, Token{0, 0, TokInvalid}, quoted)
 }
 
 func (self *Interp) EvalRight(expression Value) (Value, error) {
@@ -585,6 +608,12 @@ func (self *Interp) Eval(expression Value) (Value, error) {
 		}
 		return value, nil
 	case ValPair:
+		if expression.PairLeft.Type == ValSymbol && expression.PairLeft.Symbol == "quote" {
+			if expression.PairRight.Type != ValPair {
+				panic("Parser must ensure that quote has arguments")
+			}
+			return *expression.PairRight.PairLeft, nil
+		}
 		left, err := self.Eval(*expression.PairLeft)
 		if err != nil {
 			return Value{Type: ValNull}, err
@@ -629,7 +658,7 @@ func TestLex() {
 func TestPars() {
 	var parser Pars
 	for {
-		expression, err := parser.ParseNext(os.Stdin)
+		expression, err := parser.Parse(os.Stdin, false)
 		if err == io.EOF {
 			break
 		} else if err != nil {
@@ -668,18 +697,14 @@ func TestEval() {
 		}
 		return Value{Type: ValNumber, Number: acc}, nil
 	}
-	quoteFn := func(arg Value, interp Interp) (Value, error) {
-		return arg, nil
-	}
 	var parser Pars
 	var interpreter Interp
 	interpreter.Source = &parser.Lex.Source
 	interpreter.Table = map[string]Value{
 		"+": Value{Type: ValProc, Proc: plusFn},
-		"quote": Value{Type: ValProc, Proc: quoteFn},
 	}
 	for {
-		expression, err := parser.ParseNext(os.Stdin)
+		expression, err := parser.Parse(os.Stdin, false)
 		if err == io.EOF {
 			break
 		} else if err != nil {
