@@ -95,6 +95,12 @@ func (e Error) Error() string {
 	return fmt.Sprintf("<stdin>:%v:%v: %v", e.LineNumber, e.OffsetInLine, e.Text)
 }
 
+func (self Value) assertType(valueType ValueType) {
+	if self.Type != valueType {
+		panic(fmt.Sprintf("Expected type %v, got type %v", valueType, self.Type))
+	}
+}
+
 func NewError(source string, offset int, text string) Error {
 	var line int = 1
 	var offsetInLine int
@@ -467,7 +473,7 @@ func (self *Pars) ParseRemainingList(input io.Reader, quotedMode bool) (*Value, 
 	pseudoRoot := Value{Type: ValPair, PairRight: &Value{Type: ValNull}}
 	last := &pseudoRoot
 	for {
-		expression := Value{Type:ValPair}
+		expression := Value{Type: ValPair}
 		last.PairRight = &expression
 		token, err := self.NextToken(input)
 		if err != nil {
@@ -569,6 +575,11 @@ func (self *Pars) Parse(input io.Reader, quoted bool) (Value, error) {
 	return self.ParseWithToken(input, Token{0, 0, TokInvalid}, quoted)
 }
 
+func (self Interp) NewEvalError(value Value, text string) (Value, error) {
+	return ValueNull(), NewError(self.Source.String(), value.Token.Offset, text)
+}
+
+
 func (self *Interp) EvalRight(expression Value) (Value, error) {
 	pseudoRoot := Value{Type: ValPair, PairRight: &Value{Type: ValNull}}
 	lastPair := &pseudoRoot
@@ -601,16 +612,14 @@ func (self *Interp) Eval(expression Value) (Value, error) {
 	case ValSymbol:
 		value, ok := self.Table[expression.Symbol]
 		if ok == false {
-			return Value{Type: ValNull}, NewError(
-				self.Source.String(),
-				expression.Token.Offset,
-				fmt.Sprintf("Unbound variable: \"%v\"", expression.Symbol))
+			return self.NewEvalError(expression, fmt.Sprintf(
+				"Unbound variable: \"%v\"", expression.Symbol))
 		}
 		return value, nil
 	case ValPair:
 		if expression.PairLeft.Type == ValSymbol && expression.PairLeft.Symbol == "quote" {
 			if expression.PairRight.Type != ValPair {
-				panic("Parser must ensure that quote has arguments")
+				panic("Parser must have ensure that `quote` has arguments")
 			}
 			return *expression.PairRight.PairLeft, nil
 		}
@@ -619,10 +628,8 @@ func (self *Interp) Eval(expression Value) (Value, error) {
 			return Value{Type: ValNull}, err
 		}
 		if left.Type != ValProc {
-			return Value{Type: ValNull}, NewError(
-				self.Source.String(),
-				expression.Token.Offset,
-				fmt.Sprintf("Wrong type to apply: %v", expression))
+			return self.NewEvalError(expression, fmt.Sprintf(
+				"Wrong type to apply: %v", expression))
 		}
 		right, err := self.EvalRight(*expression.PairRight)
 		if err != nil {
@@ -670,32 +677,24 @@ func TestPars() {
 
 func TestEval() {
 	plusFn := func(arg Value, interp Interp) (Value, error) {
-		var acc int
-		var position int
+		if arg.Type == ValNull {
+			return ValueNull(), nil
+		}
+		var acc, position int
 		for arg.Type != ValNull {
-			position += 1
+			position++
 			if arg.Type != ValPair {
-				return Value{Type: ValNull}, NewError(
-					interp.Source.String(),
-					arg.Token.Offset,
-					fmt.Sprintf(
-						"Wrong type argument in position %d (expecting ValPair): %v",
-						position,
-						arg.Type))
+				return interp.NewEvalError(arg, fmt.Sprintf(
+					"`+` expects proper list, given improper list end %v", arg))
 			}
 			left := *arg.PairLeft
 			if left.Type != ValNumber {
-				return Value{Type: ValNull}, NewError(
-					interp.Source.String(),
-					arg.Token.Offset,
-					fmt.Sprintf(
-						"Wrong type argument in position %d (expecting ValPair): %v",
-						position,
-						arg.Type))
+				return interp.NewEvalError(arg, fmt.Sprintf(
+					"`+` expects number, given %v at position %v", arg, position))
 			}
 			acc += left.Number
-			if arg.PairRight == nil || arg.PairRight.Type == ValNull {
-				break
+			if arg.PairRight == nil {
+				panic("ValPair.PairRight points to nil")
 			}
 			arg = *arg.PairRight
 		}
@@ -703,41 +702,25 @@ func TestEval() {
 	}
 	carFn := func(arg Value, interp Interp) (Value, error) {
 		if arg.Type != ValPair {
-			return Value{Type: ValNull}, NewError(
-				interp.Source.String(),
-				arg.Token.Offset,
-				fmt.Sprintf(
-					"Wrong type argument in position 1 (expecting ValPair): %v",
-					arg))
+			return interp.NewEvalError(arg, fmt.Sprintf(
+				"`car` expects single list argument, given %v", arg))
 		}
-		left := arg.PairLeft
+		left := *arg.PairLeft
 		if left.Type != ValPair {
-			return Value{Type: ValNull}, NewError(
-				interp.Source.String(),
-				arg.Token.Offset,
-				fmt.Sprintf(
-					"Wrong type argument in position 1 (expecting ValPair): %v",
-					left))
+			return interp.NewEvalError(left, fmt.Sprintf(
+				"`car` expects ValPair argument, given: %v", left))
 		}
 		return *left.PairLeft, nil
 	}
 	cdrFn := func(arg Value, interp Interp) (Value, error) {
 		if arg.Type != ValPair {
-			return Value{Type: ValNull}, NewError(
-				interp.Source.String(),
-				arg.Token.Offset,
-				fmt.Sprintf(
-					"Wrong type argument in position 1 (expecting ValPair): %v",
-					arg))
+			return interp.NewEvalError(arg, fmt.Sprintf(
+				"`cdr` expects single list argument, given %v", arg))
 		}
-		left := arg.PairLeft
+		left := *arg.PairLeft
 		if left.Type != ValPair {
-			return Value{Type: ValNull}, NewError(
-				interp.Source.String(),
-				arg.Token.Offset,
-				fmt.Sprintf(
-					"Wrong type argument in position 1 (expecting ValPair): %v",
-					left))
+			return interp.NewEvalError(left, fmt.Sprintf(
+				"`cdr` expects ValPair argument, given: %v", left))
 		}
 		return *left.PairRight, nil
 	}
@@ -745,7 +728,7 @@ func TestEval() {
 	var interpreter Interp
 	interpreter.Source = &parser.Lex.Source
 	interpreter.Table = map[string]Value{
-		"+": Value{Type: ValProc, Proc: plusFn},
+		"+":   Value{Type: ValProc, Proc: plusFn},
 		"car": Value{Type: ValProc, Proc: carFn},
 		"cdr": Value{Type: ValProc, Proc: cdrFn},
 	}
@@ -760,8 +743,9 @@ func TestEval() {
 		result, err := interpreter.Eval(expression)
 		if err != nil {
 			fmt.Printf("Eval error: %s\n", err.Error())
+		} else {
+			fmt.Printf("Eval result: %v\n", result)
 		}
-		fmt.Printf("Eval result: %v\n", result)
 	}
 }
 
