@@ -579,6 +579,33 @@ func (self Interp) NewEvalError(value Value, text string) (Value, error) {
 	return ValueNull(), NewError(self.Source.String(), value.Token.Offset, text)
 }
 
+func (self *Interp) Define(arg Value) (Value, error) {
+	if arg.Type != ValPair {
+		return self.NewEvalError(arg, fmt.Sprintf(
+			"`define` expects 2 arguments, given unexpected end of list %v", arg))
+	}
+	left := *arg.PairLeft
+	switch left.Type {
+	case ValSymbol:
+		arg = *arg.PairRight
+		if arg.Type != ValPair {
+			return self.NewEvalError(arg, fmt.Sprintf(
+				"`define` expects 2 arguments, given unexpected end of list %v", arg))
+		}
+		right, err := self.Eval(*arg.PairLeft)
+		if err != nil {
+			return right, err
+		}
+		self.Table[left.Symbol] = right
+		return ValueNull(), nil
+	case ValPair:
+		return self.NewEvalError(left, fmt.Sprintf(
+			"defining functions is not supported yet"))
+	}
+	return self.NewEvalError(left, fmt.Sprintf(
+		"`define` expects ValSymbol or ValPair argument, given: %v", left))
+	return *left.PairLeft, nil
+}
 
 func (self *Interp) EvalRight(expression Value) (Value, error) {
 	pseudoRoot := Value{Type: ValPair, PairRight: &Value{Type: ValNull}}
@@ -617,11 +644,16 @@ func (self *Interp) Eval(expression Value) (Value, error) {
 		}
 		return value, nil
 	case ValPair:
-		if expression.PairLeft.Type == ValSymbol && expression.PairLeft.Symbol == "quote" {
-			if expression.PairRight.Type != ValPair {
-				panic("Parser must have ensure that `quote` has arguments")
+		if expression.PairLeft.Type == ValSymbol {
+			switch expression.PairLeft.Symbol {
+			case "quote":
+				if expression.PairRight.Type != ValPair {
+					panic("Parser must have ensure that `quote` has arguments")
+				}
+				return *expression.PairRight.PairLeft, nil
+			case "define":
+				return self.Define(*expression.PairRight)
 			}
-			return *expression.PairRight.PairLeft, nil
 		}
 		left, err := self.Eval(*expression.PairLeft)
 		if err != nil {

@@ -15,11 +15,14 @@ Sort of roadmap:
   - [ ] `define` and lexical scoping
     - [ ] Constants
     - [ ] Procedures
+  - [ ] `if`
   - [ ] `lambda`
 
-Maybe it is worth to implement:
+Things are probably worth implementing:
 - Quasiquote and unquote
 - `define-syntax`
+- `cond`
+- `let`
 
 What won't be implemented (almost certainly)
 - Floating point numbers
